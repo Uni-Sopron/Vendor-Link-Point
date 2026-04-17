@@ -1,0 +1,54 @@
+﻿@model Vendor_Link_Point.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Bejelentkezés";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Bejelentkezés</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="pelda@email.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Jelszo" class="form-label"></label>
+                        <input asp-for="Jelszo" class="form-control" />
+                        <span asp-validation-for="Jelszo" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary">Bejelentkezés</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a asp-action="Register" class="text-decoration-none">Még nincs fiókod? Regisztrálj!</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
