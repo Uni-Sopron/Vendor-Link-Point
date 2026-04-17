@@ -34,6 +34,11 @@ namespace Vendor_Link_Point.Models
         [StringLength(200)]
         [Display(Name = "Szállítási cím")]
         public string SzallitasiCim { get; set; }
+
+        [Required(ErrorMessage = "A telefonszám megadása kötelező!")]
+        [Phone(ErrorMessage = "Érvénytelen telefonszám formátum!")]
+        [Display(Name = "Telefonszám")]
+        public string Telefonszam { get; set; }
     }
 
     public class Kereskedo : User
@@ -42,5 +47,9 @@ namespace Vendor_Link_Point.Models
         [StringLength(50)]
         [Display(Name = "Kereskedő Azonosító")]
         public string KereskedoId { get; set; }
+
+        [Display(Name = "Cégnév / Bolt neve")]
+        [StringLength(100)]
+        public string Cegnev { get; set; }
     }
 }
