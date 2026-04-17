@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
+using Vendor_Link_Point.Data;
+
 namespace Vendor_Link_Point
 {
     public class Program
@@ -8,6 +12,11 @@ namespace Vendor_Link_Point
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<VendorLinkPointContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             var app = builder.Build();
 
