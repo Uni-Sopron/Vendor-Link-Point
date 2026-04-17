@@ -33,6 +33,16 @@ namespace Vendor_Link_Point.Models
         [StringLength(50)]
         [Display(Name = "Kategória")]
         public string Kategoria { get; set; }
+
+        [Display(Name = "Termék leírása")]
+        [StringLength(1000)]
+        public string Leiras { get; set; }
+
+        [Display(Name = "Kép elérési útja")]
+        public string KepUrl { get; set; }
+
+        [Display(Name = "Elérhető a webshopban?")]
+        public bool Elerheto { get; set; } = true;
     }
 
     public class TV : Product
