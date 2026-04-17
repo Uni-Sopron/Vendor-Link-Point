@@ -1,0 +1,113 @@
+﻿@model Vendor_Link_Point.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Regisztráció";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Regisztráció</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Nev" class="form-label"></label>
+                        <input asp-for="Nev" class="form-control" />
+                        <span asp-validation-for="Nev" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Jelszo" class="form-label"></label>
+                            <input asp-for="Jelszo" class="form-control" />
+                            <span asp-validation-for="Jelszo" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="JelszoUjra" class="form-label"></label>
+                            <input asp-for="JelszoUjra" class="form-control" />
+                            <span asp-validation-for="JelszoUjra" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 text-center">
+                        <label class="form-label d-block fw-bold">Fiók típusa:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="Role" value="Vasarlo" id="radioVasarlo" onchange="toggleFields()">
+                                <label class="form-check-label" for="radioVasarlo">Vásárló</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" asp-for="Role" value="Kereskedo" id="radioKereskedo" onchange="toggleFields()">
+                                    <label class="form-check-label" for="radioKereskedo">Kereskedő</label>
+                                </div>
+                            </div>
+
+                            <div id="vasarloFields">
+                                <hr />
+                                <h6 class="text-muted">Vásárlói adatok</h6>
+                                <div class="mb-3">
+                                    <label asp-for="SzallitasiCim" class="form-label"></label>
+                                    <input asp-for="SzallitasiCim" class="form-control" />
+                                    <span asp-validation-for="SzallitasiCim" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Telefonszam" class="form-label"></label>
+                                    <input asp-for="Telefonszam" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div id="kereskedoFields" style="display:none;">
+                                <hr />
+                                <h6 class="text-muted">Kereskedői adatok</h6>
+                                <div class="mb-3">
+                                    <label asp-for="KereskedoId" class="form-label"></label>
+                                    <input asp-for="KereskedoId" class="form-control bg-light" readonly />
+                                    <span asp-validation-for="KereskedoId" class="text-danger"></span>
+                                    <small class="text-muted">Ez az ön egyedi kereskedői azonosítója, amit a rendszer automatikusan generált önnek.</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="Cegnev" class="form-label"></label>
+                                    <input asp-for="Cegnev" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-block">Regisztráció</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+
+            <script>
+                function toggleFields() {
+                    var isKereskedo = document.getElementById('radioKereskedo').checked;
+            
+                    if (isKereskedo) {
+                        document.getElementById('vasarloFields').style.display = 'none';
+                        document.getElementById('kereskedoFields').style.display = 'block';
+                    } else {
+                        document.getElementById('vasarloFields').style.display = 'block';
+                        document.getElementById('kereskedoFields').style.display = 'none';
+                    }
+                }
+
+                // Oldal betöltésekor is fusson le, ha esetleg a szerver visszaadja a formot hibával
+                window.onload = toggleFields;
+            </script>
+        }
