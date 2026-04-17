@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260417082810_ExtendedBaseModels")]
+    partial class ExtendedBaseModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
