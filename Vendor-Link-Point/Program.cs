@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
+using Vendor_Link_Point.Data;
+
 namespace Vendor_Link_Point
 {
     public class Program
@@ -8,6 +13,20 @@ namespace Vendor_Link_Point
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Süti alapú hitelesítés beállítása
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login"; // Ide irányítja a usert, ha nincs bejelentkezve
+                    options.LogoutPath = "/Account/Logout";
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1); // 1 óráig maradjon bejelentkezve
+                });
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<VendorLinkPointContext>(options =>
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             var app = builder.Build();
 
@@ -22,6 +41,7 @@ namespace Vendor_Link_Point
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication(); // Hitelesítés engedélyezése
             app.UseAuthorization();
 
             app.MapStaticAssets();
