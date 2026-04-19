@@ -83,5 +83,8 @@ namespace Vendor_Link_Point.Data
                 }
             );
         }
+        public DbSet<Vendor_Link_Point.Models.TV> TV { get; set; } = default!;
+        public DbSet<Vendor_Link_Point.Models.Konyv> Konyv { get; set; } = default!;
+        public DbSet<Vendor_Link_Point.Models.Jatek> Jatek { get; set; } = default!;
     }
 }
