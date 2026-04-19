@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Vendor_Link_Point.Models.Jatek>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Korhatar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nev)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gyarto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Raktarkeszlet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kategoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Leiras)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KepUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Elerheto)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Korhatar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nev)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gyarto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Raktarkeszlet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kategoria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Leiras)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KepUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Elerheto)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
