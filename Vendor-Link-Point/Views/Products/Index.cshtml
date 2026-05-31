@@ -1,77 +1,104 @@
-﻿@model IEnumerable<Vendor_Link_Point.Models.Product>
+﻿@model Vendor_Link_Point.ViewModels.WebshopViewModel
 
 @{
     ViewData["Title"] = "Webshop";
-    var currentCategory = ViewData["CurrentCategory"] as string;
 }
 
 <nav aria-label="breadcrumb" class="mt-3">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Főoldal</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Webshop @(!string.IsNullOrEmpty(currentCategory) ? $" > {currentCategory}" : "")</li>
+        <li class="breadcrumb-item active" aria-current="page">Webshop @(!string.IsNullOrEmpty(Model.CurrentCategory) ? $" > {Model.CurrentCategory}" : "")</li>
     </ol>
 </nav>
 
 <div class="row mt-2">
     <div class="col-lg-3 col-md-4 mb-4">
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-header bg-white border-bottom fw-bold">
-                <i class="bi bi-funnel text-primary me-2"></i>Kategóriák
-            </div>
-            <div class="list-group list-group-flush">
-                <a asp-action="Index" asp-route-kategoria="" class="list-group-item list-group-item-action @(string.IsNullOrEmpty(currentCategory) ? "active bg-primary border-primary" : "")">
-                    Minden Termék
-                </a>
-                <a asp-action="Index" asp-route-kategoria="TV-k" class="list-group-item list-group-item-action @(currentCategory == "TV-k" ? "active bg-primary border-primary" : "")">
-                    TV és Szórakozás
-                </a>
-                <a asp-action="Index" asp-route-kategoria="Könyvek" class="list-group-item list-group-item-action @(currentCategory == "Könyvek" ? "active bg-primary border-primary" : "")">
-                    Könyvek
-                </a>
-                <a asp-action="Index" asp-route-kategoria="Játékok" class="list-group-item list-group-item-action @(currentCategory == "Játékok" ? "active bg-primary border-primary" : "")">
-                    Játékok
-                </a>
-            </div>
-        </div>
+        <form method="get" asp-action="Index" id="filterForm">
+            <input type="hidden" name="kategoria" value="@Model.CurrentCategory" />
 
-        @if (currentCategory == "TV-k")
-        {
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-bottom fw-bold">TV Specifikációk</div>
-                <div class="card-body p-3">
-                    <h6 class="text-muted small fw-bold text-uppercase">Képátló</h6>
-                    <div class="form-check mb-2"><input class="form-check-input" type="checkbox"><label class="form-check-label">55" - 65"</label></div>
-                    <div class="form-check mb-3"><input class="form-check-input" type="checkbox"><label class="form-check-label">65" felett</label></div>
-                    <h6 class="text-muted small fw-bold text-uppercase">Felbontás</h6>
-                    <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label">4K Ultra HD</label></div>
+                <div class="card-header bg-white border-bottom fw-bold">
+                    <i class="bi bi-funnel text-primary me-2"></i>Kategóriák
+                </div>
+                <div class="list-group list-group-flush">
+                    <a asp-action="Index" asp-route-kategoria="" class="list-group-item list-group-item-action @(string.IsNullOrEmpty(Model.CurrentCategory) ? "active bg-primary border-primary" : "") d-flex justify-content-between align-items-center">
+                        Minden Termék
+                    </a>
+                    <a asp-action="Index" asp-route-kategoria="TV-k" class="list-group-item list-group-item-action @(Model.CurrentCategory == "TV-k" ? "active bg-primary border-primary" : "") d-flex justify-content-between align-items-center">
+                        TV és Szórakozás <span class="badge bg-secondary rounded-pill">@Model.TvCount</span>
+                    </a>
+                    <a asp-action="Index" asp-route-kategoria="Könyvek" class="list-group-item list-group-item-action @(Model.CurrentCategory == "Könyvek" ? "active bg-primary border-primary" : "") d-flex justify-content-between align-items-center">
+                        Könyvek <span class="badge bg-secondary rounded-pill">@Model.KonyvCount</span>
+                    </a>
+                    <a asp-action="Index" asp-route-kategoria="Játékok" class="list-group-item list-group-item-action @(Model.CurrentCategory == "Játékok" ? "active bg-primary border-primary" : "") d-flex justify-content-between align-items-center">
+                        Játékok <span class="badge bg-secondary rounded-pill">@Model.JatekCount</span>
+                    </a>
                 </div>
             </div>
-        }
-        else if (currentCategory == "Könyvek")
-        {
+
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-white border-bottom fw-bold">Könyv Szűrők</div>
+                <div class="card-header bg-white border-bottom fw-bold">Ár (Ft)</div>
                 <div class="card-body p-3">
-                    <div class="form-check mb-2"><input class="form-check-input" type="checkbox"><label class="form-check-label">Raktáron lévő</label></div>
-                    <div class="form-check"><input class="form-check-input" type="checkbox"><label class="form-check-label">Keménytáblás</label></div>
+                    <div class="d-flex align-items-center mb-2">
+                        <input type="number" class="form-control form-control-sm me-2" name="minAr" placeholder="Min" value="@Model.MinAr">
+                        <span>-</span>
+                        <input type="number" class="form-control form-control-sm ms-2" name="maxAr" placeholder="Max" value="@Model.MaxAr">
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary btn-sm w-100 fw-bold">Ár szűrése</button>
                 </div>
             </div>
-        }
+
+            @if (Model.CurrentCategory == "TV-k")
+            {
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-white border-bottom fw-bold">Képátló (col)</div>
+                    <div class="card-body p-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="meretek" value="kicsi" id="m1" onchange="this.form.submit()" @(Model.KivalasztottMeretek.Contains("kicsi") ? "checked" : "") @(Model.TvMeretKicsiCount == 0 && !Model.KivalasztottMeretek.Contains("kicsi") ? "disabled" : "")>
+                            <label class="form-check-label @(Model.TvMeretKicsiCount == 0 && !Model.KivalasztottMeretek.Contains("kicsi") ? "text-muted" : "")" for="m1">
+                                45" alatt (@Model.TvMeretKicsiCount)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="meretek" value="kozepes" id="m2" onchange="this.form.submit()" @(Model.KivalasztottMeretek.Contains("kozepes") ? "checked" : "") @(Model.TvMeretKozepesCount == 0 && !Model.KivalasztottMeretek.Contains("kozepes") ? "disabled" : "")>
+                            <label class="form-check-label @(Model.TvMeretKozepesCount == 0 && !Model.KivalasztottMeretek.Contains("kozepes") ? "text-muted" : "")" for="m2">
+                                45" - 55" (@Model.TvMeretKozepesCount)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="meretek" value="nagy" id="m3" onchange="this.form.submit()" @(Model.KivalasztottMeretek.Contains("nagy") ? "checked" : "") @(Model.TvMeretNagyCount == 0 && !Model.KivalasztottMeretek.Contains("nagy") ? "disabled" : "")>
+                            <label class="form-check-label @(Model.TvMeretNagyCount == 0 && !Model.KivalasztottMeretek.Contains("nagy") ? "text-muted" : "")" for="m3">
+                                56" - 65" (@Model.TvMeretNagyCount)
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="meretek" value="extra" id="m4" onchange="this.form.submit()" @(Model.KivalasztottMeretek.Contains("extra") ? "checked" : "") @(Model.TvMeretExtraCount == 0 && !Model.KivalasztottMeretek.Contains("extra") ? "disabled" : "")>
+                            <label class="form-check-label @(Model.TvMeretExtraCount == 0 && !Model.KivalasztottMeretek.Contains("extra") ? "text-muted" : "")" for="m4">
+                                65" felett (@Model.TvMeretExtraCount)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            }
+        </form>
     </div>
 
     <div class="col-lg-9 col-md-8">
-        <h3 class="fw-bold mb-4">@(string.IsNullOrEmpty(currentCategory) ? "Minden Termék" : currentCategory)</h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">@(string.IsNullOrEmpty(Model.CurrentCategory) ? "Minden Termék" : Model.CurrentCategory)</h3>
+            <span class="text-muted">@Model.Termekek.Count() termék</span>
+        </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-xl-4 g-4 mb-5">
-            @if (!Model.Any())
+            @if (!Model.Termekek.Any())
             {
                 <div class="col-12">
-                    <div class="alert alert-warning border-0 shadow-sm">Ebben a kategóriában jelenleg nincs elérhető termék.</div>
+                    <div class="alert alert-warning border-0 shadow-sm">A megadott szűrési feltételeknek egyetlen termék sem felel meg. Próbálj módosítani a szűrőkön!</div>
                 </div>
             }
             else
             {
-                foreach (var item in Model)
+                foreach (var item in Model.Termekek)
                 {
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0 transition-hover">
@@ -87,7 +114,6 @@
                                     <img src="@item.KepUrl" class="card-img-top rounded-top p-2" alt="@item.Nev" style="height: 160px; object-fit: contain; background: #fff;">
                                 }
                             </a>
-
                             <div class="card-body d-flex flex-column p-3 bg-white">
                                 <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none text-dark">
                                     <h6 class="card-title text-truncate fw-bold mb-1" title="@item.Nev">@item.Nev</h6>
@@ -95,7 +121,6 @@
                                 <p class="card-text text-muted small mb-3">@item.Gyarto</p>
                                 <h5 class="text-danger mt-auto fw-bold mb-0">@item.Ar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h5>
                             </div>
-
                             <div class="card-footer bg-white border-top-0 p-3 pt-0">
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary w-100 fw-bold">
                                     Megnézem
