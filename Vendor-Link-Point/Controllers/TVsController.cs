@@ -61,6 +61,9 @@ namespace Vendor_Link_Point.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Kepatlo,Felbontas,Id,Nev,Gyarto,Ar,Raktarkeszlet,Kategoria,Leiras,KepUrl,Elerheto")] TV tV)
         {
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
+
             if (ModelState.IsValid)
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
@@ -102,6 +105,9 @@ namespace Vendor_Link_Point.Controllers
             if (id != tV.Id) return NotFound();
 
             var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
 
             if (ModelState.IsValid)
             {

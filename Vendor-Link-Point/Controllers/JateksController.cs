@@ -63,6 +63,9 @@ namespace Vendor_Link_Point.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Korhatar,Tipus,Id,Nev,Gyarto,Ar,Raktarkeszlet,Kategoria,Leiras,KepUrl,Elerheto")] Jatek jatek)
         {
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
+
             if (ModelState.IsValid)
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
@@ -104,6 +107,9 @@ namespace Vendor_Link_Point.Controllers
             if (id != jatek.Id) return NotFound();
 
             var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
 
             if (ModelState.IsValid)
             {
