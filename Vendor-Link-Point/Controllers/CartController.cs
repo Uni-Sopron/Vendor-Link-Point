@@ -58,5 +58,16 @@ namespace Vendor_Link_Point.Controllers
             SaveKosar(kosar);
             return RedirectToAction(nameof(Index));
         }
+
+        // POST: /Cart/UpdateQuantity
+        [HttpPost]
+        public IActionResult UpdateQuantity(int id, int change)
+        {
+            var kosar = GetKosar();
+            kosar.FrissitMennyiseg(id, change); // change lehet +1 vagy -1
+            SaveKosar(kosar);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
