@@ -21,6 +21,31 @@ namespace Vendor_Link_Point.Models
             Tetelek.RemoveAll(t => t.Termek.Id == termekId);
         }
 
+        public void FrissitMennyiseg(int termekId, int valtozas)
+        {
+            var tetel = Tetelek.FirstOrDefault(t => t.Termek.Id == termekId);
+            if (tetel != null)
+            {
+                int ujMennyiseg = tetel.Mennyiseg + valtozas;
+
+                // Ne engedjük a raktárkészlet fölé
+                if (ujMennyiseg > tetel.Termek.Raktarkeszlet)
+                {
+                    ujMennyiseg = tetel.Termek.Raktarkeszlet;
+                }
+
+                // Ha nullára vagy az alá csökkenti, akkor kivesszük a kosárból
+                if (ujMennyiseg <= 0)
+                {
+                    Eltavolit(termekId);
+                }
+                else
+                {
+                    tetel.Mennyiseg = ujMennyiseg;
+                }
+            }
+        }
+
         public decimal OsszesitettAr() => Tetelek.Sum(t => t.Termek.Ar * t.Mennyiseg);
         public int OsszesDarabszam() => Tetelek.Sum(t => t.Mennyiseg);
     }
