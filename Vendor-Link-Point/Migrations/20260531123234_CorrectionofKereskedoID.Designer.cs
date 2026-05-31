@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260531123234_CorrectionofKereskedoID")]
+    partial class CorrectionofKereskedoID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,11 +97,6 @@ namespace Vendor_Link_Point.Migrations
 
                     b.Property<DateTime>("Idopont")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("SzallitasiCim")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -193,33 +191,18 @@ namespace Vendor_Link_Point.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 4,
+                            Id = 3,
                             Ar = 12000m,
                             Elerheto = true,
                             Gyarto = "CD Projekt Red",
                             Kategoria = "Játékok",
-                            KepUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmGIEPRaJ3z7E8MIG.png",
-                            KereskedoId = "VLP-KOCKA",
+                            KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Witcher+3",
+                            KereskedoId = "VLP-7OF08QF3",
                             Leiras = "Az egyik legjobb nyílt világú szerepjáték Geralt kalandjaival.",
                             Nev = "The Witcher 3: Wild Hunt",
                             Raktarkeszlet = 5,
                             Korhatar = 18,
                             Tipus = "RPG"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Ar = 24000m,
-                            Elerheto = true,
-                            Gyarto = "Warner Bros",
-                            Kategoria = "Játékok",
-                            KepUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202011/0919/cDKjqQc1QvM89tU33T94k8O6.png",
-                            KereskedoId = "VLP-KOCKA",
-                            Leiras = "Légy részese a varázslóvilágnak a 19. századi Roxfortban!",
-                            Nev = "Hogwarts Legacy",
-                            Raktarkeszlet = 15,
-                            Korhatar = 16,
-                            Tipus = "Akció-RPG"
                         });
                 });
 
@@ -242,13 +225,13 @@ namespace Vendor_Link_Point.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 3,
+                            Id = 2,
                             Ar = 5500m,
                             Elerheto = true,
                             Gyarto = "Európa Kiadó",
                             Kategoria = "Könyvek",
-                            KepUrl = "https://bookline.hu/hu/control/shop/images?id=52945&type=10&size=original",
-                            KereskedoId = "VLP-KOCKA",
+                            KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Konyv",
+                            KereskedoId = "VLP-7OF08QF3",
                             Leiras = "Klasszikus fantasy regény, az epikus kaland kezdete.",
                             Nev = "A Gyűrűk Ura - A Gyűrű Szövetsége",
                             Raktarkeszlet = 30,
@@ -279,28 +262,13 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "Samsung",
                             Kategoria = "TV-k",
-                            KepUrl = "https://images.samsung.com/is/image/samsung/p6pim/hu/ue55cu7172uxxh/gallery/hu-crystal-uhd-cu7000-ue55cu7172uxxh-535874218?$650_519_PNG$",
-                            KereskedoId = "VLP-ELEKTRO",
+                            KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Samsung+TV",
+                            KereskedoId = "VLP-7OF08QF3",
                             Leiras = "Kiváló minőségű okos TV 4K felbontással.",
                             Nev = "Samsung 55\" Smart 4K TV",
                             Raktarkeszlet = 12,
                             Felbontas = "4K UHD",
                             Kepatlo = 55
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Ar = 540000m,
-                            Elerheto = true,
-                            Gyarto = "LG",
-                            Kategoria = "TV-k",
-                            KepUrl = "https://www.lg.com/hu/images/televiziok/md07560212/gallery/D-1.jpg",
-                            KereskedoId = "VLP-ELEKTRO",
-                            Leiras = "A legmélyebb fekete és a legélénkebb színek, amit csak egy OLED kijelző nyújthat.",
-                            Nev = "LG OLED 65\" C3",
-                            Raktarkeszlet = 3,
-                            Felbontas = "4K UHD",
-                            Kepatlo = 65
                         });
                 });
 
@@ -319,28 +287,6 @@ namespace Vendor_Link_Point.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.ToTable("Kereskedok", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "info@elektro.hu",
-                            Jelszo = "SEED_DUMMY_PASSWORD",
-                            Nev = "Elektro Admin",
-                            Role = "Kereskedo",
-                            Cegnev = "Elektro Kft.",
-                            KereskedoId = "VLP-ELEKTRO"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "info@kockabarlang.hu",
-                            Jelszo = "SEED_DUMMY_PASSWORD",
-                            Nev = "Kocka Admin",
-                            Role = "Kereskedo",
-                            Cegnev = "Kocka Barlang",
-                            KereskedoId = "VLP-KOCKA"
-                        });
                 });
 
             modelBuilder.Entity("Vendor_Link_Point.Models.Vasarlo", b =>

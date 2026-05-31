@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260531145943_UpdateSeedData")]
+    partial class UpdateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,11 +97,6 @@ namespace Vendor_Link_Point.Migrations
 
                     b.Property<DateTime>("Idopont")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("SzallitasiCim")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

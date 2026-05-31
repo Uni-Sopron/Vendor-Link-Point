@@ -22,25 +22,30 @@ namespace Vendor_Link_Point.Controllers
         // GET: TVs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TV.ToListAsync());
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+
+            // 2. SZŰRÉS: Csak a bejelentkezett kereskedő könyveit kérjük le
+            var myTvs = await _context.TV
+                .Where(t => t.KereskedoId == myKereskedoId)
+                .ToListAsync();
+
+            return View(myTvs);
         }
 
         // GET: TVs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var tV = await _context.TV
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tV == null)
-            {
-                return NotFound();
-            }
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
 
-            return View(tV);
+            // Csak akkor mutatjuk meg, ha az övé
+            var tv = await _context.TV
+                .FirstOrDefaultAsync(m => m.Id == id && m.KereskedoId == myKereskedoId);
+
+            if (tv == null) return NotFound();
+
+            return View(tv);
         }
 
         // GET: TVs/Create
@@ -56,8 +61,17 @@ namespace Vendor_Link_Point.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Kepatlo,Felbontas,Id,Nev,Gyarto,Ar,Raktarkeszlet,Kategoria,Leiras,KepUrl,Elerheto")] TV tV)
         {
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
+            ModelState.Remove("Elerheto");
+
             if (ModelState.IsValid)
             {
+                // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
+                tV.KereskedoId = User.FindFirst("KereskedoId")?.Value;
+                tV.Kategoria = "TV-k"; // Biztosíték
+                tV.Elerheto = tV.Raktarkeszlet > 0;
+
                 _context.Add(tV);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -68,17 +82,19 @@ namespace Vendor_Link_Point.Controllers
         // GET: TVs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (id == null) return NotFound();
+
+            var tv = await _context.TV.FindAsync(id);
+            if (tv == null) return NotFound();
+
+            // 4. JOGOSULTSÁG ELLENŐRZÉS: Tényleg ő a tulajdonos?
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+            if (tv.KereskedoId != myKereskedoId)
             {
-                return NotFound();
+                return Unauthorized(); // Ha másét akarja szerkeszteni, elutasítjuk!
             }
 
-            var tV = await _context.TV.FindAsync(id);
-            if (tV == null)
-            {
-                return NotFound();
-            }
-            return View(tV);
+            return View(tv);
         }
 
         // POST: TVs/Edit/5
@@ -88,28 +104,28 @@ namespace Vendor_Link_Point.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Kepatlo,Felbontas,Id,Nev,Gyarto,Ar,Raktarkeszlet,Kategoria,Leiras,KepUrl,Elerheto")] TV tV)
         {
-            if (id != tV.Id)
-            {
-                return NotFound();
-            }
+            if (id != tV.Id) return NotFound();
+
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+
+            ModelState.Remove("KereskedoId");
+            ModelState.Remove("Kategoria");
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
+                    tV.KereskedoId = myKereskedoId;
+                    tV.Kategoria = "Tv-k";
+
                     _context.Update(tV);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TVExists(tV.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!TVExists(tV.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -119,19 +135,16 @@ namespace Vendor_Link_Point.Controllers
         // GET: TVs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var tV = await _context.TV
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tV == null)
-            {
-                return NotFound();
-            }
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
 
-            return View(tV);
+            var tv = await _context.TV
+                .FirstOrDefaultAsync(m => m.Id == id && m.KereskedoId == myKereskedoId);
+
+            if (tv == null) return NotFound(); // Ha másé, úgy teszünk, mintha nem is létezne
+
+            return View(tv);
         }
 
         // POST: TVs/Delete/5
@@ -139,13 +152,16 @@ namespace Vendor_Link_Point.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tV = await _context.TV.FindAsync(id);
-            if (tV != null)
+            var myKereskedoId = User.FindFirst("KereskedoId")?.Value;
+            var tv = await _context.TV.FindAsync(id);
+
+            // Törlés előtt is meggyőződünk róla, hogy az övé
+            if (tv != null && tv.KereskedoId == myKereskedoId)
             {
-                _context.TV.Remove(tV);
+                _context.TV.Remove(tv);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
