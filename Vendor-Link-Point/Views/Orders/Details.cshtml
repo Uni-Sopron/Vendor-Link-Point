@@ -60,8 +60,17 @@
                                     <h6 class="fw-bold mb-1">@(tetel.Termek?.Nev ?? "Törölt termék")</h6>
                                     <small class="text-muted">@tetel.Mennyiseg db x @tetel.Egysegar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</small>
                                 </div>
-                                <div class="fw-bold">
-                                    @((tetel.Mennyiseg * tetel.Egysegar).ToString("C0", new System.Globalization.CultureInfo("hu-HU")))
+                                <div class="text-end">
+                                    <div class="fw-bold mb-1">
+                                        @((tetel.Mennyiseg * tetel.Egysegar).ToString("C0", new System.Globalization.CultureInfo("hu-HU")))
+                                    </div>
+
+                                    @if (Model.Allapot == "Kiszállítva" && tetel.Termek != null)
+                                    {
+                                        <a asp-controller="Products" asp-action="Details" asp-route-id="@tetel.Termek.Id" class="btn btn-sm btn-outline-warning fw-bold shadow-sm mt-1">
+                                            <i class="bi bi-star-fill"></i> Értékelem
+                                        </a>
+                                    }
                                 </div>
                             </li>
                         }
