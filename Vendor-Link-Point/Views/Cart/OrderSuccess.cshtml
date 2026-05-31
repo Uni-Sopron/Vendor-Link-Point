@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Sikeres Rendelés";
+}
+
+<div class="container mt-5 mb-5 text-center">
+    <div class="card shadow border-0 py-5 mx-auto" style="max-width: 600px;">
+        <i class="bi bi-check2-circle text-success" style="font-size: 6rem;"></i>
+        <h1 class="display-5 fw-bold mt-3 text-success">Köszönjük a rendelésed!</h1>
+        <p class="lead mt-3">A rendelésedet sikeresen rögzítettük rendszerünkben.</p>
+        <div class="bg-light p-3 mx-5 rounded my-3 border">
+            <h5 class="mb-0">Rendelésszám: <span class="fw-bold text-primary">#@ViewBag.OrderId</span></h5>
+        </div>
+        <p class="text-muted mb-4">A csomag összekészítéséről és a szállításról e-mailben tájékoztatunk.</p>
+
+        <div>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary fw-bold px-4 me-2">Vissza a Webshopba</a>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-primary fw-bold px-4">Főoldal</a>
+        </div>
+    </div>
+</div>

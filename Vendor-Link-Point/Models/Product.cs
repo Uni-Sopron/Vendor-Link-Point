@@ -1,8 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Vendor_Link_Point.Models
 {
+    [JsonDerivedType(typeof(TV), typeDiscriminator: "TV")]
+    [JsonDerivedType(typeof(Konyv), typeDiscriminator: "Konyv")]
+    [JsonDerivedType(typeof(Jatek), typeDiscriminator: "Jatek")]
     public abstract class Product
     {
         [Key]

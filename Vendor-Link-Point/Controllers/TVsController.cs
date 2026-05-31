@@ -69,7 +69,7 @@ namespace Vendor_Link_Point.Controllers
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
                 tV.KereskedoId = User.FindFirst("KereskedoId")?.Value;
-                tV.Kategoria = "Tv-k"; // Biztosíték
+                tV.Kategoria = "TV-k"; // Biztosíték
                 tV.Elerheto = tV.Raktarkeszlet > 0;
 
                 _context.Add(tV);
