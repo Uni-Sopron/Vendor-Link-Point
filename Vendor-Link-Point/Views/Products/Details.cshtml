@@ -1,0 +1,80 @@
+﻿@model Vendor_Link_Point.Models.Product
+
+@{
+    ViewData["Title"] = Model.Nev;
+}
+
+<nav aria-label="breadcrumb" class="mt-3 mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-decoration-none">Főoldal</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Műszaki cikk</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-route-kategoria="@Model.Kategoria" class="text-decoration-none">@Model.Kategoria</a></li>
+        <li class="breadcrumb-item active fw-bold" aria-current="page">@Model.Nev</li>
+    </ol>
+</nav>
+
+<div class="card shadow-sm border-0 mb-5 p-4">
+    <div class="row">
+        <div class="col-md-5 d-flex align-items-center justify-content-center p-4" style="background-color: #f8f9fa; border-radius: 8px;">
+            @if (string.IsNullOrEmpty(Model.KepUrl))
+            {
+                <i class="bi bi-image text-secondary" style="font-size: 8rem;"></i>
+            }
+            else
+            {
+                <img src="@Model.KepUrl" alt="@Model.Nev" class="img-fluid" style="max-height: 350px; object-fit: contain;">
+            }
+        </div>
+
+        <div class="col-md-7 ps-md-5 mt-4 mt-md-0">
+            <h2 class="fw-bold mb-3">@Model.Nev</h2>
+            <div class="mb-4 text-warning fs-5">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                <span class="text-muted ms-2 fs-6">(Értékelések)</span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <p class="mb-1 text-muted">Kategória: <span class="fw-bold text-dark">@Model.Kategoria</span></p>
+                    <p class="mb-1 text-muted">Gyártó: <span class="fw-bold text-dark">@Model.Gyarto</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <p class="mb-1 text-muted">Állapot: <span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Raktáron (@Model.Raktarkeszlet db)</span></p>
+                </div>
+            </div>
+
+            <div class="border border-warning rounded-3 p-4 bg-white shadow-sm position-relative">
+                <span class="badge bg-warning text-dark position-absolute top-0 start-0 translate-middle-y ms-3 px-3 py-2 border border-white fw-bold">Kiemelt ajánlat</span>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div>
+                        <h5 class="fw-bold text-primary mb-0"><i class="bi bi-shop me-2"></i>@ViewBag.Cegnev</h5>
+                        <small class="text-success"><i class="bi bi-shield-check me-1"></i>Megbízható Bolt</small>
+                    </div>
+                    <div class="text-end">
+                        <h3 class="text-danger fw-bold mb-0">@Model.Ar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h3>
+                        <small class="text-muted">Ingyenes kiszállítás</small>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="#" class="btn btn-warning btn-lg w-100 fw-bold shadow-sm text-dark">
+                        <i class="bi bi-cart-plus-fill me-2 fs-5"></i> Kosárba rakom
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs mb-4" id="productTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active fw-bold text-dark" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab" aria-controls="desc" aria-selected="true">Termékleírás</button>
+    </li>
+</ul>
+<div class="tab-content" id="productTabsContent">
+    <div class="tab-pane fade show active p-3 bg-white border rounded-bottom border-top-0 shadow-sm" id="desc" role="tabpanel" aria-labelledby="desc-tab">
+        <h5 class="fw-bold mb-3">Gyártói leírás és specifikációk</h5>
+        <p style="line-height: 1.8;">@Model.Leiras</p>
+    </div>
+</div>
