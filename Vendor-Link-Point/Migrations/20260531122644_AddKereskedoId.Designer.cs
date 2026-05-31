@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260531122644_AddKereskedoId")]
+    partial class AddKereskedoId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,7 +197,7 @@ namespace Vendor_Link_Point.Migrations
                             Gyarto = "CD Projekt Red",
                             Kategoria = "Játékok",
                             KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Witcher+3",
-                            KereskedoId = "VLP-7OF08QF3",
+                            KereskedoId = "1",
                             Leiras = "Az egyik legjobb nyílt világú szerepjáték Geralt kalandjaival.",
                             Nev = "The Witcher 3: Wild Hunt",
                             Raktarkeszlet = 5,
@@ -228,7 +231,7 @@ namespace Vendor_Link_Point.Migrations
                             Gyarto = "Európa Kiadó",
                             Kategoria = "Könyvek",
                             KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Konyv",
-                            KereskedoId = "VLP-7OF08QF3",
+                            KereskedoId = "1",
                             Leiras = "Klasszikus fantasy regény, az epikus kaland kezdete.",
                             Nev = "A Gyűrűk Ura - A Gyűrű Szövetsége",
                             Raktarkeszlet = 30,
@@ -260,7 +263,7 @@ namespace Vendor_Link_Point.Migrations
                             Gyarto = "Samsung",
                             Kategoria = "TV-k",
                             KepUrl = "https://dummyimage.com/400x300/282c34/fff.png&text=Samsung+TV",
-                            KereskedoId = "VLP-7OF08QF3",
+                            KereskedoId = "1",
                             Leiras = "Kiváló minőségű okos TV 4K felbontással.",
                             Nev = "Samsung 55\" Smart 4K TV",
                             Raktarkeszlet = 12,

@@ -30,6 +30,16 @@ namespace Vendor_Link_Point
 
             var app = builder.Build();
 
+            // ++ INNEN KEZDŐDIK AZ ÚJ RÉSZ (Magyar lokalizáció beállítása) ++
+            var supportedCultures = new[] { "hu-HU" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
+            // ++ ÚJ RÉSZ VÉGE ++
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

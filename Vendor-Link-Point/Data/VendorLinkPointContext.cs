@@ -36,6 +36,7 @@ namespace Vendor_Link_Point.Data
                 new TV
                 {
                     Id = 1,
+                    KereskedoId = "VLP-7OF08QF3",
                     Nev = "Samsung 55\" Smart 4K TV",
                     Gyarto = "Samsung",
                     Ar = 165000,
@@ -53,6 +54,7 @@ namespace Vendor_Link_Point.Data
                 new Konyv
                 {
                     Id = 2,
+                    KereskedoId = "VLP-7OF08QF3",
                     Nev = "A Gyűrűk Ura - A Gyűrű Szövetsége",
                     Gyarto = "Európa Kiadó",
                     Ar = 5500,
@@ -70,6 +72,7 @@ namespace Vendor_Link_Point.Data
                 new Jatek
                 {
                     Id = 3,
+                    KereskedoId = "VLP-7OF08QF3",
                     Nev = "The Witcher 3: Wild Hunt",
                     Gyarto = "CD Projekt Red",
                     Ar = 12000,
