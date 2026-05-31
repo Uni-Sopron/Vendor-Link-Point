@@ -55,7 +55,7 @@ namespace Vendor_Link_Point.Controllers
                 }
 
                 // Jelszó titkosítása
-                string hashedPassword = PasswordHelper.HashPasswordSHA256(model.Jelszo);
+                string hashedPassword = PasswordHelper.HashPassword(model.Jelszo);
 
                 if (model.Role == "Vasarlo")
                 {
@@ -116,13 +116,11 @@ namespace Vendor_Link_Point.Controllers
         {
             if (ModelState.IsValid)
             {
-                // A beírt jelszó hashelése, mert az adatbázisban is így tároljuk
-                string hashedPassword = PasswordHelper.HashPasswordSHA256(model.Jelszo);
+                // 1. Keresés az adatbázisban CSAK e-mail alapján
+                var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
 
-                // Keresés az adatbázisban
-                var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Jelszo == hashedPassword);
-
-                if (user != null)
+                // 2. Ha megvan a felhasználó ÉS a jelszó is helyes a sózott ellenőrzés alapján
+                if (user != null && PasswordHelper.VerifyPassword(model.Jelszo, user.Jelszo))
                 {
                     // Ha megvan a felhasználó, létrehozzuk a "Claim"-eket (igazolványt)
                     var claims = new List<Claim>
@@ -130,7 +128,7 @@ namespace Vendor_Link_Point.Controllers
                         new Claim(ClaimTypes.Name, user.Nev),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Role, user.Role) // Pl. "Vasarlo" vagy "Kereskedo"
+                        new Claim(ClaimTypes.Role, user.Role)
                     };
 
                     if (user is Kereskedo kereskedo)
@@ -149,7 +147,7 @@ namespace Vendor_Link_Point.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                // Ha nem talált ilyen e-mail / jelszó párost
+                // Ha nem talált ilyen e-mailt, VAGY rossz a jelszó
                 ModelState.AddModelError(string.Empty, "Hibás e-mail cím vagy jelszó!");
             }
 
