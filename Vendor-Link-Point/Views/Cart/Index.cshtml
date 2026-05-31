@@ -48,7 +48,28 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center fw-bold">@tetel.Mennyiseg db</td>
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="m-0">
+                                                    <input type="hidden" name="id" value="@tetel.Termek.Id" />
+                                                    <input type="hidden" name="change" value="-1" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle shadow-sm" style="width: 32px; height: 32px;" title="Kevesebb">-</button>
+                                                </form>
+
+                                                <span class="mx-3 fw-bold fs-5">@tetel.Mennyiseg</span>
+
+                                                <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="m-0">
+                                                    <input type="hidden" name="id" value="@tetel.Termek.Id" />
+                                                    <input type="hidden" name="change" value="1" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle shadow-sm" style="width: 32px; height: 32px;" title="Több" @(tetel.Mennyiseg >= tetel.Termek.Raktarkeszlet ? "disabled" : "")>+</button>
+                                                </form>
+                                            </div>
+
+                                            @if (tetel.Mennyiseg >= tetel.Termek.Raktarkeszlet)
+                                            {
+                                                <small class="text-danger d-block mt-1 fw-bold" style="font-size: 0.75rem;">Max. raktárkészlet!</small>
+                                            }
+                                        </td>
                                         <td class="text-end text-muted">@tetel.Termek.Ar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</td>
                                         <td class="text-end fw-bold text-dark pe-4">@((tetel.Termek.Ar * tetel.Mennyiseg).ToString("C0", new System.Globalization.CultureInfo("hu-HU")))</td>
                                         <td class="text-end pe-4">
