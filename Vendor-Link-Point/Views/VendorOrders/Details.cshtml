@@ -25,7 +25,10 @@
                             <h6 class="fw-bold text-muted mb-2">Vásárló adatai</h6>
                             <p class="mb-1"><i class="bi bi-person me-2"></i><strong>@Model.Vasarlo.Nev</strong></p>
                             <p class="mb-1"><i class="bi bi-envelope me-2"></i><a href="mailto:@Model.Vasarlo.Email" class="text-decoration-none">@Model.Vasarlo.Email</a></p>
-                            <p class="mb-0"><i class="bi bi-telephone me-2"></i>@Model.Vasarlo.Telefonszam</p>
+                            <p class="mb-0">
+                                <i class="bi bi-telephone me-2"></i>
+                                @((Model.Vasarlo as Vendor_Link_Point.Models.Vasarlo)?.Telefonszam ?? "Nincs megadva")
+                            </p>
                         </div>
                         <div class="col-md-6 border-start pl-md-3">
                             <h6 class="fw-bold text-muted mb-2">Szállítás és Fizetés</h6>
@@ -104,26 +107,48 @@
 
                     <h6 class="text-muted mb-3">Státusz módosítása:</h6>
 
+                    @{
+                        // Definiáljuk a folyamat sorrendjét
+                        var statuszSorrend = new List<string> { "Feldolgozás alatt", "Csomagolás alatt", "Kiszállítás alatt", "Kiszállítva" };
+                        int currentIndex = statuszSorrend.IndexOf(Model.Allapot);
+                        bool isLemondva = Model.Allapot == "Lemondva";
+                    }
+
                     <form asp-action="UpdateStatus" method="post" class="d-grid gap-2">
                         <input type="hidden" name="id" value="@Model.Id" />
 
-                        <button type="submit" name="ujAllapot" value="Feldolgozás alatt" class="btn btn-outline-warning fw-bold @(Model.Allapot == "Feldolgozás alatt" ? "active disabled" : "")">
+                        <button type="submit" name="ujAllapot" value="Feldolgozás alatt"
+                                class="btn btn-outline-warning fw-bold @(Model.Allapot == "Feldolgozás alatt" ? "active" : "")"
+                            @(currentIndex >= 0 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Feldolgozás alatt?');">
                             1. Feldolgozás alatt
                         </button>
 
-                        <button type="submit" name="ujAllapot" value="Csomagolás alatt" class="btn btn-outline-info fw-bold @(Model.Allapot == "Csomagolás alatt" ? "active disabled" : "")">
+                        <button type="submit" name="ujAllapot" value="Csomagolás alatt"
+                                class="btn btn-outline-info fw-bold @(Model.Allapot == "Csomagolás alatt" ? "active" : "")"
+                            @(currentIndex >= 1 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Csomagolás alatt?');">
                             2. Csomagolás alatt
                         </button>
 
-                        <button type="submit" name="ujAllapot" value="Kiszállítás alatt" class="btn btn-outline-primary fw-bold @(Model.Allapot == "Kiszállítás alatt" ? "active disabled" : "")">
+                        <button type="submit" name="ujAllapot" value="Kiszállítás alatt"
+                                class="btn btn-outline-primary fw-bold @(Model.Allapot == "Kiszállítás alatt" ? "active" : "")"
+                            @(currentIndex >= 2 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Kiszállítás alatt?');">
                             3. Kiszállítás alatt
                         </button>
 
-                        <button type="submit" name="ujAllapot" value="Kiszállítva" class="btn btn-outline-success fw-bold @(Model.Allapot == "Kiszállítva" ? "active disabled" : "")">
+                        <button type="submit" name="ujAllapot" value="Kiszállítva"
+                                class="btn btn-outline-success fw-bold @(Model.Allapot == "Kiszállítva" ? "active" : "")"
+                            @(currentIndex >= 3 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Kiszállítva?');">
                             4. Kiszállítva (Kész)
                         </button>
 
-                        <button type="submit" name="ujAllapot" value="Lemondva" class="btn btn-outline-danger fw-bold mt-3 @(Model.Allapot == "Lemondva" ? "active disabled" : "")" onclick="return confirm('Biztosan lemondod? Ezzel a termékek visszakerülnek a raktárba.');">
+                        <button type="submit" name="ujAllapot" value="Lemondva"
+                                class="btn btn-outline-danger fw-bold mt-3 @(isLemondva ? "active disabled" : "")"
+                            @(Model.Allapot == "Kiszállítva" ? "disabled" : "")
+                                onclick="return confirm('Biztosan lemondod? Ezzel a termékek visszakerülnek a raktárba.');">
                             <i class="bi bi-x-lg me-1"></i> Rendelés Törlése / Lemondása
                         </button>
                     </form>
