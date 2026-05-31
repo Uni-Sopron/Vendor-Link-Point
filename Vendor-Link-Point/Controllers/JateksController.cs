@@ -65,12 +65,14 @@ namespace Vendor_Link_Point.Controllers
         {
             ModelState.Remove("KereskedoId");
             ModelState.Remove("Kategoria");
+            ModelState.Remove("Elerheto");
 
             if (ModelState.IsValid)
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
                 jatek.KereskedoId = User.FindFirst("KereskedoId")?.Value;
-                jatek.Kategoria = "Játék"; // Biztosíték
+                jatek.Kategoria = "Játékok"; // Biztosíték
+                jatek.Elerheto = jatek.Raktarkeszlet > 0;
 
                 _context.Add(jatek);
                 await _context.SaveChangesAsync();
@@ -117,7 +119,7 @@ namespace Vendor_Link_Point.Controllers
                 {
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
                     jatek.KereskedoId = myKereskedoId;
-                    jatek.Kategoria = "Játék";
+                    jatek.Kategoria = "Játékok";
 
                     _context.Update(jatek);
                     await _context.SaveChangesAsync();
