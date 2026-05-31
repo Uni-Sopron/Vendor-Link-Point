@@ -49,6 +49,9 @@ namespace Vendor_Link_Point.Models
 
         [Display(Name = "Elérhető a webshopban?")]
         public bool Elerheto { get; set; } = true;
+
+        // Egy termékhez több értékelés is tartozhat
+        public virtual ICollection<Ertekeles> Ertekelesek { get; set; } = new List<Ertekeles>();
     }
 
     public class TV : Product

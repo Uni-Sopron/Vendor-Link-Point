@@ -31,7 +31,12 @@
 
                     <div class="mb-3">
                         <label asp-for="Jelszo" class="form-label"></label>
-                        <input asp-for="Jelszo" class="form-control" />
+                        <div class="input-group">
+                            <input asp-for="Jelszo" class="form-control" id="loginPassword" />
+                            <button class="btn btn-outline-secondary bg-white border-start-0" type="button" onclick="togglePassword('loginPassword', 'loginEyeIcon')" tabindex="-1">
+                                <i class="bi bi-eye text-muted" id="loginEyeIcon"></i>
+                            </button>
+                        </div>
                         <span asp-validation-for="Jelszo" class="text-danger"></span>
                     </div>
 
@@ -51,4 +56,21 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            var passwordInput = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+    </script>
 }
