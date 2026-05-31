@@ -37,6 +37,10 @@
                                 {
                                     <span class="badge bg-success px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-check-circle me-1"></i> @rendeles.Allapot</span>
                                 }
+                                else if (rendeles.Allapot == "Lemondva")
+                                {
+                                    <span class="badge bg-danger px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-x-circle me-1"></i> @rendeles.Allapot</span>
+                                }
                                 else
                                 {
                                     <span class="badge bg-secondary px-3 py-2 fs-6 mb-2 d-inline-block">@rendeles.Allapot</span>
@@ -74,12 +78,15 @@
                         </div>
 
                         <div class="card-footer bg-white text-muted small p-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <strong><i class="bi bi-geo-alt me-1"></i> Szállítási cím:</strong> @rendeles.SzallitasiCim
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="mb-1"><strong><i class="bi bi-geo-alt me-1"></i> Szállítási cím:</strong> @rendeles.SzallitasiCim</div>
+                                    <div><strong><i class="bi bi-credit-card me-1"></i> Fizetési mód:</strong> @rendeles.FizetesiMod</div>
                                 </div>
-                                <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                                    <strong><i class="bi bi-credit-card me-1"></i> Fizetési mód:</strong> @rendeles.FizetesiMod
+                                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                    <a asp-action="Details" asp-route-id="@rendeles.Id" class="btn btn-outline-primary btn-sm fw-bold w-100">
+                                        Részletek és opciók <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
