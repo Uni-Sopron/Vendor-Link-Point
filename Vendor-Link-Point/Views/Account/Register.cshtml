@@ -29,12 +29,22 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label asp-for="Jelszo" class="form-label"></label>
-                            <input asp-for="Jelszo" class="form-control" />
+                            <div class="input-group">
+                                <input asp-for="Jelszo" class="form-control" id="regPassword" />
+                                <button class="btn btn-outline-secondary bg-white border-start-0" type="button" onclick="togglePassword('regPassword', 'regEyeIcon')" tabindex="-1">
+                                    <i class="bi bi-eye text-muted" id="regEyeIcon"></i>
+                                </button>
+                            </div>
                             <span asp-validation-for="Jelszo" class="text-danger"></span>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label asp-for="JelszoUjra" class="form-label"></label>
-                            <input asp-for="JelszoUjra" class="form-control" />
+                            <div class="input-group">
+                                <input asp-for="JelszoUjra" class="form-control" id="regPasswordConfirm" />
+                                <button class="btn btn-outline-secondary bg-white border-start-0" type="button" onclick="togglePassword('regPasswordConfirm', 'regEyeIconConfirm')" tabindex="-1">
+                                    <i class="bi bi-eye text-muted" id="regEyeIconConfirm"></i>
+                                </button>
+                            </div>
                             <span asp-validation-for="JelszoUjra" class="text-danger"></span>
                         </div>
                     </div>
@@ -89,25 +99,40 @@
             </div>
         </div>
 
-        @section Scripts {
-            @{
-                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function toggleFields() {
+            var isKereskedo = document.getElementById('radioKereskedo').checked;
+
+            if (isKereskedo) {
+                document.getElementById('vasarloFields').style.display = 'none';
+                document.getElementById('kereskedoFields').style.display = 'block';
+            } else {
+                document.getElementById('vasarloFields').style.display = 'block';
+                document.getElementById('kereskedoFields').style.display = 'none';
             }
-
-            <script>
-                function toggleFields() {
-                    var isKereskedo = document.getElementById('radioKereskedo').checked;
-            
-                    if (isKereskedo) {
-                        document.getElementById('vasarloFields').style.display = 'none';
-                        document.getElementById('kereskedoFields').style.display = 'block';
-                    } else {
-                        document.getElementById('vasarloFields').style.display = 'block';
-                        document.getElementById('kereskedoFields').style.display = 'none';
-                    }
-                }
-
-                // Oldal betöltésekor is fusson le, ha esetleg a szerver visszaadja a formot hibával
-                window.onload = toggleFields;
-            </script>
         }
+
+        // Oldal betöltésekor is fusson le, ha esetleg a szerver visszaadja a formot hibával
+        window.onload = toggleFields;
+
+        function togglePassword(inputId, iconId) {
+            var passwordInput = document.getElementById(inputId);
+            var icon = document.getElementById(iconId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+    </script>
+}
