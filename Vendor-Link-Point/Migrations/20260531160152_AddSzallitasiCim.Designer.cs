@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260531160152_AddSzallitasiCim")]
+    partial class AddSzallitasiCim
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,40 +24,6 @@ namespace Vendor_Link_Point.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("Vendor_Link_Point.Models.Ertekeles", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Datum")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Pontszam")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Szoveg")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Ertekelesek");
-                });
 
             modelBuilder.Entity("Vendor_Link_Point.Models.Product", b =>
                 {
@@ -393,25 +362,6 @@ namespace Vendor_Link_Point.Migrations
                     b.ToTable("Vasarlok", (string)null);
                 });
 
-            modelBuilder.Entity("Vendor_Link_Point.Models.Ertekeles", b =>
-                {
-                    b.HasOne("Vendor_Link_Point.Models.Product", "Termek")
-                        .WithMany("Ertekelesek")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Vendor_Link_Point.Models.User", "Vasarlo")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Termek");
-
-                    b.Navigation("Vasarlo");
-                });
-
             modelBuilder.Entity("Vendor_Link_Point.Models.Rendeles", b =>
                 {
                     b.HasOne("Vendor_Link_Point.Models.User", "Vasarlo")
@@ -485,11 +435,6 @@ namespace Vendor_Link_Point.Migrations
                         .HasForeignKey("Vendor_Link_Point.Models.Vasarlo", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Vendor_Link_Point.Models.Product", b =>
-                {
-                    b.Navigation("Ertekelesek");
                 });
 
             modelBuilder.Entity("Vendor_Link_Point.Models.Rendeles", b =>

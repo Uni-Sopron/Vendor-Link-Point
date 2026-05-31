@@ -1,12 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Vendor_Link_Point.Models
 {
+    [JsonDerivedType(typeof(TV), typeDiscriminator: "TV")]
+    [JsonDerivedType(typeof(Konyv), typeDiscriminator: "Konyv")]
+    [JsonDerivedType(typeof(Jatek), typeDiscriminator: "Jatek")]
     public abstract class Product
     {
         [Key]
         public int Id { get; set; }
+
+        public string KereskedoId { get; set; }
 
         [Required(ErrorMessage = "A termék nevének megadása kötelező!")]
         [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet.")]
@@ -43,6 +49,9 @@ namespace Vendor_Link_Point.Models
 
         [Display(Name = "Elérhető a webshopban?")]
         public bool Elerheto { get; set; } = true;
+
+        // Egy termékhez több értékelés is tartozhat
+        public virtual ICollection<Ertekeles> Ertekelesek { get; set; } = new List<Ertekeles>();
     }
 
     public class TV : Product

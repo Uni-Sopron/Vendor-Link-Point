@@ -1,0 +1,69 @@
+﻿@model Vendor_Link_Point.Models.Kosar
+
+@{
+    ViewData["Title"] = "Pénztár";
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="fw-bold mb-4">Pénztár és Fizetés</h2>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0 p-4">
+                <h4 class="fw-bold mb-3 border-bottom pb-2">Hogyan szeretnél fizetni?</h4>
+
+                <form asp-controller="Cart" asp-action="PlaceOrder" method="post">
+
+                    <h5 class="fw-bold mb-3 border-bottom pb-2 mt-2"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Hová kéred a csomagot?</h5>
+                    <div class="mb-5 p-3 border rounded bg-light">
+                        <label for="szallitasiCim" class="form-label text-muted small fw-bold text-uppercase">Szállítási cím</label>
+                        <textarea class="form-control" id="szallitasiCim" name="szallitasiCim" rows="2" required>@ViewBag.AlapCim</textarea>
+                        <div class="form-text">Ha a munkahelyedre vagy máshová kéred, nyugodtan írd át a fenti címet!</div>
+                    </div>
+                    <h5 class="fw-bold mb-3 border-bottom pb-2">Hogyan szeretnél fizetni?</h5>
+
+                    <div class="form-check mb-3 p-3 border rounded">
+                        <input class="form-check-input ms-1" type="radio" name="fizetesiMod" id="utanvet" value="Utánvét" checked>
+                        <label class="form-check-label ms-3 fw-bold" for="utanvet">
+                            <i class="bi bi-box-seam text-primary me-2"></i> Utánvét (Fizetés a futárnál)
+                        </label>
+                        <small class="d-block ms-4 text-muted">A csomag átvételekor készpénzzel vagy bankkártyával fizethetsz a futárnak.</small>
+                    </div>
+
+                    <div class="form-check mb-4 p-3 border rounded bg-light">
+                        <input class="form-check-input ms-1" type="radio" name="fizetesiMod" id="bankkartya" value="Bankkártya" disabled>
+                        <label class="form-check-label ms-3 fw-bold text-muted" for="bankkartya">
+                            <i class="bi bi-credit-card text-secondary me-2"></i> Online Bankkártya <span class="badge bg-secondary ms-2">Hamarosan</span>
+                        </label>
+                        <small class="d-block ms-4 text-muted">Az online fizetési rendszer integrálása folyamatban van.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg px-5 shadow fw-bold">
+                        <i class="bi bi-check-circle-fill me-2"></i> Rendelés leadása
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold border-bottom pb-2 mb-3">Rendelésed tartalma</h5>
+                    <ul class="list-unstyled mb-3">
+                        @foreach (var item in Model.Tetelek)
+                        {
+                            <li class="d-flex justify-content-between text-muted small mb-2">
+                                <span>@item.Mennyiseg x @item.Termek.Nev</span>
+                                <span>@((item.Termek.Ar * item.Mennyiseg).ToString("C0", new System.Globalization.CultureInfo("hu-HU")))</span>
+                            </li>
+                        }
+                    </ul>
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-3">
+                        <h5 class="mb-0">Fizetendő:</h5>
+                        <h4 class="mb-0 fw-bold text-danger">@Model.OsszesitettAr().ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
