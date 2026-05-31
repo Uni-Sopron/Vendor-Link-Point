@@ -102,7 +102,7 @@
                             <h3 class="mb-0 fw-bold text-warning">@Model.OsszesitettAr().ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h3>
                         </div>
 
-                        <a href="#" class="btn btn-warning btn-lg w-100 fw-bold text-dark mt-4 shadow">
+                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-warning btn-lg w-100 fw-bold text-dark mt-4 shadow transition-hover">
                             Tovább a fizetéshez <i class="bi bi-arrow-right-circle ms-1"></i>
                         </a>
                     </div>
