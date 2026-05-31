@@ -95,11 +95,10 @@ namespace Vendor_Link_Point.Controllers
             return View(kosar);
         }
 
-        // POST: /Cart/PlaceOrder
+        // POST: /Cart/PlaceOrder (Rendelés véglegesítése és mentése)
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // ++ MOST MÁR A SZÁLLÍTÁSI CÍMET IS VÁRJUK A PARAMÉTEREKBEN ++
         public async Task<IActionResult> PlaceOrder(string fizetesiMod, string szallitasiCim)
         {
             var kosar = GetKosar();
@@ -108,58 +107,65 @@ namespace Vendor_Link_Point.Controllers
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!int.TryParse(userIdString, out int userId)) return Unauthorized();
 
-            // Ha valamiért üres címet küldene be, visszadobjuk egy hibával
             if (string.IsNullOrWhiteSpace(szallitasiCim))
             {
                 ModelState.AddModelError("", "Kérjük, adj meg egy érvényes szállítási címet!");
                 return View("Checkout", kosar);
             }
 
-            var rendeles = new Rendeles
-            {
-                UserId = userId,
-                Idopont = DateTime.Now,
-                Vegosszeg = kosar.OsszesitettAr(),
-                Allapot = "Feldolgozás alatt",
-                FizetesiMod = fizetesiMod,
-                SzallitasiCim = szallitasiCim, // ++ ITT ELMENTJÜK AZ ÚJ CÍMET ++
-                RendelesTetelek = new List<RendelesTetel>()
-            };
+            // ++ A ZSENIÁLIS LOGIKA: SZÉTBONTJUK A KOSARAT KERESKEDŐK SZERINT ++
+            // Csoportosítjuk a kosárban lévő tételeket az eladó (KereskedoId) alapján
+            var tetelekKereskedonkent = kosar.Tetelek.GroupBy(t => t.Termek.KereskedoId);
 
-            // 2. Tételek átemelése és raktárkészlet csökkentése
-            foreach (var item in kosar.Tetelek)
+            foreach (var kereskedoCsoport in tetelekKereskedonkent)
             {
-                // Frissítjük a raktárkészletet az adatbázisban
-                var termekDb = await _context.Products.FindAsync(item.Termek.Id);
-                if (termekDb != null)
+                // Minden egyes kereskedő kap egy SAJÁT, független rendelést
+                var rendeles = new Rendeles
                 {
-                    termekDb.Raktarkeszlet -= item.Mennyiseg;
-                    if (termekDb.Raktarkeszlet < 0) termekDb.Raktarkeszlet = 0; // Biztonsági limit
+                    UserId = userId,
+                    Idopont = DateTime.Now,
+                    // Csak az adott kereskedő termékeinek összegét számoljuk ki:
+                    Vegosszeg = kereskedoCsoport.Sum(t => t.Termek.Ar * t.Mennyiseg),
+                    Allapot = "Feldolgozás alatt",
+                    FizetesiMod = fizetesiMod,
+                    SzallitasiCim = szallitasiCim,
+                    RendelesTetelek = new List<RendelesTetel>()
+                };
 
-                    // Ha elfogyott, automatikusan rejtjük a vásárlók elől
-                    if (termekDb.Raktarkeszlet == 0) termekDb.Elerheto = false;
+                // Hozzáadjuk a kereskedőhöz tartozó termékeket
+                foreach (var item in kereskedoCsoport)
+                {
+                    var termekDb = await _context.Products.FindAsync(item.Termek.Id);
+                    if (termekDb != null)
+                    {
+                        termekDb.Raktarkeszlet -= item.Mennyiseg;
+                        if (termekDb.Raktarkeszlet < 0) termekDb.Raktarkeszlet = 0;
+                        if (termekDb.Raktarkeszlet == 0) termekDb.Elerheto = false;
 
-                    _context.Update(termekDb);
+                        _context.Update(termekDb);
+                    }
+
+                    rendeles.RendelesTetelek.Add(new RendelesTetel
+                    {
+                        ProductId = item.Termek.Id,
+                        Mennyiseg = item.Mennyiseg,
+                        Egysegar = item.Termek.Ar
+                    });
                 }
 
-                // Rendelési tétel hozzáadása a rendeléshez
-                rendeles.RendelesTetelek.Add(new RendelesTetel
-                {
-                    ProductId = item.Termek.Id,
-                    Mennyiseg = item.Mennyiseg,
-                    Egysegar = item.Termek.Ar
-                });
+                // Mentjük a rész-rendelést
+                _context.Rendelesek.Add(rendeles);
             }
 
-            // 3. Mentés az adatbázisba
-            _context.Rendelesek.Add(rendeles);
+            // Az összes (akár 3-4 db) rendelést egyszerre küldjük be az adatbázisba
             await _context.SaveChangesAsync();
 
-            // 4. Kosár ürítése a memóriából (Sikeres fizetés)
+            // Kosár ürítése a memóriából
             HttpContext.Session.Remove("Kosar");
 
-            // 5. Átirányítás a Köszönjük oldalra
-            return RedirectToAction(nameof(OrderSuccess), new { orderId = rendeles.Id });
+            // Mivel most már nem egyetlen ID-nk van, hanem több is lehet, 
+            // a sikeres fizetés után rögtön a "Saját rendeléseim" oldalra irányítjuk a vásárlót!
+            return RedirectToAction("Index", "Orders");
         }
 
         // GET: /Cart/OrderSuccess
