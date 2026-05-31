@@ -1,25 +1,47 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System;
+using System.Security.Cryptography;
 
 namespace Vendor_Link_Point.Helpers
 {
     public static class PasswordHelper
     {
-        public static string HashPasswordSHA256(string password)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // A jelszó byte-tömbbé alakítása
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+        private const int SaltSize = 16; // 128 bit-es só
+        private const int KeySize = 32;  // 256 bit-es hash
+        private const int Iterations = 100000; // 100 000 körös fűszerezés (biztonságos iparági standard)
+        private static readonly HashAlgorithmName _hashAlgorithmName = HashAlgorithmName.SHA256;
+        private const char Delimiter = ':';
 
-                // A byte-tömb visszaalakítása olvasható hexadecimális stringgé
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+        // Új, sózott és iterált jelszó generálása (Regisztrációkor)
+        public static string HashPassword(string password)
+        {
+            // 1. Véletlenszerű só generálása
+            byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
+
+            // 2. A jelszó hashelése a sóval és a megadott iterációszámmal
+            byte[] hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, _hashAlgorithmName, KeySize);
+
+            // 3. Visszaadjuk a Só és a Hash összekapcsolt stringjét (Base64 formátumban)
+            return string.Join(Delimiter, Convert.ToBase64String(salt), Convert.ToBase64String(hash));
+        }
+
+        // Jelszó ellenőrzése (Belépéskor)
+        public static bool VerifyPassword(string password, string hashedPassword)
+        {
+            // Szétválasztjuk az adatbázisból jövő stringet Sóra és Hashre
+            var elements = hashedPassword.Split(Delimiter);
+            if (elements.Length != 2)
+            {
+                return false; // Ha nincs benne a ':', akkor ez még egy régi (sózatlan) jelszó, amit elutasítunk
             }
+
+            byte[] salt = Convert.FromBase64String(elements[0]);
+            byte[] hash = Convert.FromBase64String(elements[1]);
+
+            // Vesszük a beírt jelszót, és ráküldjük UGYANAZT a sót és iterációt
+            byte[] hashInput = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, _hashAlgorithmName, KeySize);
+
+            // Összehasonlítjuk, hogy a beírt jelszó hash-e megegyezik-e az adatbázisban lévővel
+            return CryptographicOperations.FixedTimeEquals(hash, hashInput);
         }
     }
 }
