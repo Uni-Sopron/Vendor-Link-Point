@@ -133,6 +133,11 @@ namespace Vendor_Link_Point.Controllers
                         new Claim(ClaimTypes.Role, user.Role) // Pl. "Vasarlo" vagy "Kereskedo"
                     };
 
+                    if (user is Kereskedo kereskedo)
+                    {
+                        claims.Add(new Claim("KereskedoId", kereskedo.KereskedoId));
+                    }
+
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     // A Süti létrehozása és bejelentkeztetés
