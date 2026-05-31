@@ -80,19 +80,82 @@ namespace Vendor_Link_Point.Controllers
         {
             if (id == null) return NotFound();
 
-            // Lekérjük a terméket
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            // Lekérjük a terméket és Hozzácsatoljuk (Include) az értékeléseket és az értékelőket is!
+            var product = await _context.Products
+                .Include(p => p.Ertekelesek)
+                    .ThenInclude(e => e.Vasarlo)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null) return NotFound();
 
-            // Megkeressük a hozzá tartozó Kereskedőt, hogy kiírhassuk a bolt nevét
             var kereskedo = await _context.Users.OfType<Kereskedo>()
                                           .FirstOrDefaultAsync(k => k.KereskedoId == product.KereskedoId);
 
-            // Átadjuk a kereskedő cégnevét a Nézetnek (ha nincs, "Ismeretlen Bolt" lesz)
             ViewBag.Cegnev = kereskedo?.Cegnev ?? "Ismeretlen Bolt";
 
+            // --- ÉRTÉKELÉSI LOGIKA ÉS JOGOSULTSÁGVIZSGÁLAT ---
+            bool canReview = false;
+            bool hasReviewed = false;
+
+            if (User.Identity.IsAuthenticated && User.IsInRole("Vasarlo"))
+            {
+                var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdString, out int userId))
+                {
+                    // 1. Értékelte már?
+                    hasReviewed = product.Ertekelesek.Any(e => e.UserId == userId);
+
+                    // 2. Ha még nem, megvette és megkapta már?
+                    if (!hasReviewed)
+                    {
+                        canReview = await _context.Rendelesek
+                            .Include(r => r.RendelesTetelek)
+                            .AnyAsync(r => r.UserId == userId &&
+                                           r.Allapot == "Kiszállítva" &&
+                                           r.RendelesTetelek.Any(rt => rt.ProductId == id));
+                    }
+                }
+            }
+
+            // Átadjuk az adatokat a nézetnek
+            ViewBag.CanReview = canReview;
+            ViewBag.HasReviewed = hasReviewed;
+            ViewBag.AverageRating = product.Ertekelesek.Any() ? product.Ertekelesek.Average(e => e.Pontszam) : 0;
+
             return View(product);
+        }
+
+        // POST: /Products/AddReview (ÚJ METÓDUS AZ ÉRTÉKELÉS BEKÜLDÉSÉRE)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddReview(int productId, int pontszam, string szoveg)
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdString, out int userId)) return Unauthorized();
+
+            // Háttér oldali biztonsági ellenőrzés (Hacker védelem)
+            var hasPurchased = await _context.Rendelesek
+                .Include(r => r.RendelesTetelek)
+                .AnyAsync(r => r.UserId == userId && r.Allapot == "Kiszállítva" && r.RendelesTetelek.Any(rt => rt.ProductId == productId));
+
+            var alreadyReviewed = await _context.Ertekelesek.AnyAsync(e => e.ProductId == productId && e.UserId == userId);
+
+            if (hasPurchased && !alreadyReviewed)
+            {
+                var ertekeles = new Ertekeles
+                {
+                    ProductId = productId,
+                    UserId = userId,
+                    Pontszam = pontszam,
+                    Szoveg = szoveg,
+                    Datum = DateTime.Now
+                };
+                _context.Ertekelesek.Add(ertekeles);
+                await _context.SaveChangesAsync();
+            }
+
+            // Visszadobjuk az adatlapra
+            return RedirectToAction(nameof(Details), new { id = productId });
         }
     }
 }
