@@ -14,6 +14,7 @@ namespace Vendor_Link_Point.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Rendeles> Rendelesek { get; set; }
         public DbSet<RendelesTetel> RendelesTetelek { get; set; }
+        public DbSet<Ertekeles> Ertekelesek { get; set; }
 
         // 2. Adatbázis sémák és öröklődések finomhangolása
         protected override void OnModelCreating(ModelBuilder modelBuilder)
