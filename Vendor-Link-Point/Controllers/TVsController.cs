@@ -63,12 +63,14 @@ namespace Vendor_Link_Point.Controllers
         {
             ModelState.Remove("KereskedoId");
             ModelState.Remove("Kategoria");
+            ModelState.Remove("Elerheto");
 
             if (ModelState.IsValid)
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
                 tV.KereskedoId = User.FindFirst("KereskedoId")?.Value;
                 tV.Kategoria = "Tv-k"; // Biztosíték
+                tV.Elerheto = tV.Raktarkeszlet > 0;
 
                 _context.Add(tV);
                 await _context.SaveChangesAsync();
