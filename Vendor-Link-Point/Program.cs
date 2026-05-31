@@ -14,6 +14,14 @@ namespace Vendor_Link_Point
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // 30 perc inaktivitás után ürül a kosár
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             // Süti alapú hitelesítés beállítása
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -30,6 +38,16 @@ namespace Vendor_Link_Point
 
             var app = builder.Build();
 
+            // ++ INNEN KEZDŐDIK AZ ÚJ RÉSZ (Magyar lokalizáció beállítása) ++
+            var supportedCultures = new[] { "hu-HU" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
+            // ++ ÚJ RÉSZ VÉGE ++
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -40,6 +58,8 @@ namespace Vendor_Link_Point
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthentication(); // Hitelesítés engedélyezése
             app.UseAuthorization();

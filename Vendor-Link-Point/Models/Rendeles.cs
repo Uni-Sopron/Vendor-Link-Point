@@ -33,6 +33,11 @@ namespace Vendor_Link_Point.Models
         [Display(Name = "Fizetési mód")]
         public string FizetesiMod { get; set; }
 
+        [Required(ErrorMessage = "A szállítási cím megadása kötelező!")]
+        [StringLength(200)]
+        [Display(Name = "Szállítási Cím")]
+        public string SzallitasiCim { get; set; }
+
         // Egy rendeléshez több tétel tartozik
         public virtual ICollection<RendelesTetel> RendelesTetelek { get; set; }
     }

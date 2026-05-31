@@ -1,0 +1,160 @@
+﻿@model Vendor_Link_Point.Models.Rendeles
+
+@{
+    ViewData["Title"] = $"Rendelés #{Model.Id} kezelése";
+}
+
+<div class="container-fluid mt-4 mb-5 px-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Beérkezett Rendelések</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rendelés #@Model.Id</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-light border-bottom p-3 fw-bold d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-person-lines-fill text-primary me-2"></i> Vásárló és Szállítási adatok</span>
+                    <span class="text-muted small">Dátum: @Model.Idopont.ToString("yyyy. MM. dd. HH:mm")</span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="fw-bold text-muted mb-2">Vásárló adatai</h6>
+                            <p class="mb-1"><i class="bi bi-person me-2"></i><strong>@Model.Vasarlo.Nev</strong></p>
+                            <p class="mb-1"><i class="bi bi-envelope me-2"></i><a href="mailto:@Model.Vasarlo.Email" class="text-decoration-none">@Model.Vasarlo.Email</a></p>
+                            <p class="mb-0">
+                                <i class="bi bi-telephone me-2"></i>
+                                @((Model.Vasarlo as Vendor_Link_Point.Models.Vasarlo)?.Telefonszam ?? "Nincs megadva")
+                            </p>
+                        </div>
+                        <div class="col-md-6 border-start pl-md-3">
+                            <h6 class="fw-bold text-muted mb-2">Szállítás és Fizetés</h6>
+                            <p class="mb-1"><i class="bi bi-geo-alt me-2 text-danger"></i>@Model.SzallitasiCim</p>
+                            <p class="mb-0"><i class="bi bi-credit-card me-2 text-success"></i>@Model.FizetesiMod</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light border-bottom p-3 fw-bold">
+                    <i class="bi bi-box2-heart text-primary me-2"></i> Megrendelt tételek
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var tetel in Model.RendelesTetelek)
+                        {
+                            <li class="list-group-item p-3 d-flex align-items-center">
+                                @if (tetel.Termek != null && !string.IsNullOrEmpty(tetel.Termek.KepUrl))
+                                {
+                                    <img src="@tetel.Termek.KepUrl" class="border rounded p-1 me-3" style="width: 50px; height: 50px; object-fit: contain;">
+                                }
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-0">@(tetel.Termek?.Nev ?? "Törölt termék")</h6>
+                                    <small class="text-muted">Vonalkód/Azonosító: @tetel.Termek?.Id</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">@tetel.Mennyiseg db</div>
+                                    <small class="text-muted">@tetel.Egysegar.ToString("C0", new System.Globalization.CultureInfo("hu-HU")) / db</small>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="card-footer bg-white text-end p-3">
+                    <h4 class="mb-0">Végösszeg: <span class="fw-bold text-danger">@Model.Vegosszeg.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</span></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 bg-light sticky-top" style="top: 20px;">
+                <div class="card-header bg-white border-bottom p-3 fw-bold text-center">
+                    Rendelés Állapota
+                </div>
+                <div class="card-body p-4 text-center">
+
+                    <h6 class="text-muted mb-3">Jelenlegi státusz:</h6>
+                    @if (Model.Allapot == "Feldolgozás alatt")
+                    {
+                        <h3 class="text-warning fw-bold mb-4"><i class="bi bi-hourglass-split me-2"></i>Feldolgozás alatt</h3>
+                    }
+                    else if (Model.Allapot == "Csomagolás alatt")
+                    {
+
+                        <h3 class="text-info fw-bold mb-4"><i class="bi bi-box-seam me-2"></i>Csomagolás alatt</h3>
+                    }
+                    else if (Model.Allapot == "Kiszállítás alatt")
+                    {
+
+                        <h3 class="text-primary fw-bold mb-4"><i class="bi bi-truck me-2"></i>Kiszállítás alatt</h3>
+                    }
+                    else if (Model.Allapot == "Kiszállítva")
+                    {
+
+                        <h3 class="text-success fw-bold mb-4"><i class="bi bi-check-circle me-2"></i>Kiszállítva</h3>
+                    }
+                    else
+                    {
+
+                        <h3 class="text-danger fw-bold mb-4"><i class="bi bi-x-circle me-2"></i>Lemondva</h3>
+                    }
+
+                    <hr class="mb-4" />
+
+                    <h6 class="text-muted mb-3">Státusz módosítása:</h6>
+
+                    @{
+                        // Definiáljuk a folyamat sorrendjét
+                        var statuszSorrend = new List<string> { "Feldolgozás alatt", "Csomagolás alatt", "Kiszállítás alatt", "Kiszállítva" };
+                        int currentIndex = statuszSorrend.IndexOf(Model.Allapot);
+                        bool isLemondva = Model.Allapot == "Lemondva";
+                    }
+
+                    <form asp-action="UpdateStatus" method="post" class="d-grid gap-2">
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <button type="submit" name="ujAllapot" value="Feldolgozás alatt"
+                                class="btn btn-outline-warning fw-bold @(Model.Allapot == "Feldolgozás alatt" ? "active" : "")"
+                            @(currentIndex >= 0 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Feldolgozás alatt?');">
+                            1. Feldolgozás alatt
+                        </button>
+
+                        <button type="submit" name="ujAllapot" value="Csomagolás alatt"
+                                class="btn btn-outline-info fw-bold @(Model.Allapot == "Csomagolás alatt" ? "active" : "")"
+                            @(currentIndex >= 1 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Csomagolás alatt?');">
+                            2. Csomagolás alatt
+                        </button>
+
+                        <button type="submit" name="ujAllapot" value="Kiszállítás alatt"
+                                class="btn btn-outline-primary fw-bold @(Model.Allapot == "Kiszállítás alatt" ? "active" : "")"
+                            @(currentIndex >= 2 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Kiszállítás alatt?');">
+                            3. Kiszállítás alatt
+                        </button>
+
+                        <button type="submit" name="ujAllapot" value="Kiszállítva"
+                                class="btn btn-outline-success fw-bold @(Model.Allapot == "Kiszállítva" ? "active" : "")"
+                            @(currentIndex >= 3 || isLemondva ? "disabled" : "")
+                                onclick="return confirm('Biztos, hogy átállítod az állapotot erre: Kiszállítva?');">
+                            4. Kiszállítva (Kész)
+                        </button>
+
+                        <button type="submit" name="ujAllapot" value="Lemondva"
+                                class="btn btn-outline-danger fw-bold mt-3 @(isLemondva ? "active disabled" : "")"
+                            @(Model.Allapot == "Kiszállítva" ? "disabled" : "")
+                                onclick="return confirm('Biztosan lemondod? Ezzel a termékek visszakerülnek a raktárba.');">
+                            <i class="bi bi-x-lg me-1"></i> Rendelés Törlése / Lemondása
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

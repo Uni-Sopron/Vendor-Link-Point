@@ -1,0 +1,127 @@
+﻿@model Vendor_Link_Point.Models.Rendeles
+
+@{
+    ViewData["Title"] = $"Rendelés #{Model.Id} részletei";
+}
+
+<div class="container mt-4 mb-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Saját Rendeléseim</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rendelés #@Model.Id</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Rendelés részletei</h2>
+
+        @if (Model.Allapot == "Feldolgozás alatt")
+        {
+            <span class="badge bg-warning text-dark px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-hourglass-split me-1"></i> @Model.Allapot</span>
+        }
+        else if (Model.Allapot == "Csomagolás alatt")
+        {
+            <span class="badge bg-info text-dark px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-box-seam me-1"></i> @Model.Allapot</span>
+        }
+        else if (Model.Allapot == "Kiszállítás alatt")
+        {
+            <span class="badge bg-primary px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-truck me-1"></i> @Model.Allapot</span>
+        }
+        else if (Model.Allapot == "Kiszállítva")
+        {
+            <span class="badge bg-success px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-check-circle me-1"></i> @Model.Allapot</span>
+        }
+        else if (Model.Allapot == "Lemondva")
+        {
+            <span class="badge bg-danger px-3 py-2 fs-6 mb-2 d-inline-block"><i class="bi bi-x-circle me-1"></i> @Model.Allapot</span>
+        }
+        else
+        {
+            <span class="badge bg-success px-3 py-2 fs-6 shadow-sm"><i class="bi bi-check-circle me-1"></i> @Model.Allapot</span>
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light border-bottom p-3 fw-bold">
+                    Megrendelt termékek
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        @foreach (var tetel in Model.RendelesTetelek)
+                        {
+                            <li class="list-group-item p-3 d-flex align-items-center">
+                                @if (tetel.Termek != null && !string.IsNullOrEmpty(tetel.Termek.KepUrl))
+                                {
+                                    <img src="@tetel.Termek.KepUrl" class="border rounded p-1 me-3" style="width: 60px; height: 60px; object-fit: contain;">
+                                }
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1">@(tetel.Termek?.Nev ?? "Törölt termék")</h6>
+                                    <small class="text-muted">@tetel.Mennyiseg db x @tetel.Egysegar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold mb-1">
+                                        @((tetel.Mennyiseg * tetel.Egysegar).ToString("C0", new System.Globalization.CultureInfo("hu-HU")))
+                                    </div>
+
+                                    @if (Model.Allapot == "Kiszállítva" && tetel.Termek != null)
+                                    {
+                                        <a asp-controller="Products" asp-action="Details" asp-route-id="@tetel.Termek.Id" class="btn btn-sm btn-outline-warning fw-bold shadow-sm mt-1">
+                                            <i class="bi bi-star-fill"></i> Értékelem
+                                        </a>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            @if (Model.Allapot == "Feldolgozás alatt")
+            {
+                <div class="card border-danger mt-4 shadow-sm">
+                    <div class="card-body p-4 text-center bg-white rounded">
+                        <h5 class="text-danger fw-bold mb-3">Megvondoltad magad?</h5>
+                        <p class="text-muted">Mivel a rendelésed még feldolgozás alatt áll, díjmentesen lemondhatod.</p>
+                        <form asp-action="Cancel" method="post">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-outline-danger fw-bold px-4" onclick="return confirm('Biztosan le szeretnéd mondani ezt a rendelést? A művelet nem vonható vissza!');">
+                                <i class="bi bi-trash me-2"></i> Rendelés lemondása
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 bg-light mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold border-bottom pb-2 mb-3">Rendelés infó</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Dátum:</span>
+                        <span class="fw-bold">@Model.Idopont.ToString("yyyy. MM. dd. HH:mm")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Fizetési mód:</span>
+                        <span class="fw-bold">@Model.FizetesiMod</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-3">
+                        <h5 class="mb-0">Végösszeg:</h5>
+                        <h4 class="mb-0 fw-bold text-danger">@Model.Vegosszeg.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom p-3 fw-bold">
+                    <i class="bi bi-geo-alt-fill text-danger me-2"></i> Szállítási cím
+                </div>
+                <div class="card-body p-3">
+                    <p class="mb-0 text-muted">@Model.SzallitasiCim</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
