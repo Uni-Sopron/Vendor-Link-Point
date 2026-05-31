@@ -73,9 +73,6 @@
                             <i class="bi bi-grid-fill me-1 text-primary"></i> Összes termék (Webshop)
                         </a>
                     </li>
-                    <li class="nav-item me-3">
-                        <a class="nav-link text-secondary px-0" asp-area="" asp-controller="Home" asp-action="Privacy">Adatvédelem</a>
-                    </li>
 
                     @if (User.Identity.IsAuthenticated && User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value == "Kereskedo")
                     {
