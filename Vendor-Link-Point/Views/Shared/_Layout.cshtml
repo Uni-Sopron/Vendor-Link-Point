@@ -47,7 +47,18 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown">
 
-                                    <li><a class="dropdown-item fw-bold text-primary py-2" asp-area="" asp-controller="Orders" asp-action="Index"><i class="bi bi-box-seam me-2"></i>Rendeléseim</a></li>
+                                    @if (User.IsInRole("Vasarlo"))
+                                    {
+                                        <!-- Ezt CSAK a Vásárló látja -->
+                                        <li><a class="dropdown-item fw-bold text-primary py-2" asp-area="" asp-controller="Orders" asp-action="Index"><i class="bi bi-box-seam me-2"></i>Saját Rendeléseim</a></li>
+                                    }
+
+                                    @if (User.IsInRole("Kereskedo"))
+                                    {
+                                        <!-- Ezt CSAK a Kereskedő látja -->
+                                        <li><a class="dropdown-item fw-bold text-success py-2" asp-area="" asp-controller="VendorOrders" asp-action="Index"><i class="bi bi-shop me-2"></i>Beérkezett Rendelések</a></li>
+                                    }
+
                                     <li><hr class="dropdown-divider"></li>
                                     <li><h6 class="dropdown-header">Szerepkör: @User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value</h6></li>
                                     <li><hr class="dropdown-divider"></li>
