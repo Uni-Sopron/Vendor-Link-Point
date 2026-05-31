@@ -8,6 +8,8 @@ namespace Vendor_Link_Point.Models
         [Key]
         public int Id { get; set; }
 
+        public string KereskedoId { get; set; }
+
         [Required(ErrorMessage = "A termék nevének megadása kötelező!")]
         [StringLength(100, ErrorMessage = "A név maximum 100 karakter lehet.")]
         [Display(Name = "Termék neve")]
