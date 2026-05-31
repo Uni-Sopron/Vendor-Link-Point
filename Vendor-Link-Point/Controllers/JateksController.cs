@@ -70,7 +70,7 @@ namespace Vendor_Link_Point.Controllers
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
                 jatek.KereskedoId = User.FindFirst("KereskedoId")?.Value;
-                jatek.Kategoria = "Játék"; // Biztosíték
+                jatek.Kategoria = "Játékok"; // Biztosíték
 
                 _context.Add(jatek);
                 await _context.SaveChangesAsync();
@@ -117,7 +117,7 @@ namespace Vendor_Link_Point.Controllers
                 {
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
                     jatek.KereskedoId = myKereskedoId;
-                    jatek.Kategoria = "Játék";
+                    jatek.Kategoria = "Játékok";
 
                     _context.Update(jatek);
                     await _context.SaveChangesAsync();
