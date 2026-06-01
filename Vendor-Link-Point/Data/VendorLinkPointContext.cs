@@ -18,6 +18,7 @@ namespace Vendor_Link_Point.Data
         public DbSet<TV> TV { get; set; } = default!;
         public DbSet<Konyv> Konyv { get; set; } = default!;
         public DbSet<Jatek> Jatek { get; set; } = default!;
+        public DbSet<Kedvenc> Kedvencek { get; set; } = default!;
 
         // 2. Adatbázis sémák és öröklődések finomhangolása
         protected override void OnModelCreating(ModelBuilder modelBuilder)
