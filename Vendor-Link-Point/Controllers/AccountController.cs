@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Vendor_Link_Point.Data;
 using Vendor_Link_Point.Helpers;
 using Vendor_Link_Point.Models;
@@ -159,6 +160,68 @@ namespace Vendor_Link_Point.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: /Account/Settings
+        [Authorize]
+        public async Task<IActionResult> Settings()
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdString, out int userId)) return RedirectToAction("Login");
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            var model = new SettingsViewModel { Role = user.Role };
+
+            // Adatok betöltése szerepkör alapján
+            if (user is Vasarlo vasarlo)
+            {
+                model.SzallitasiCim = vasarlo.SzallitasiCim;
+                model.Telefonszam = vasarlo.Telefonszam;
+            }
+            else if (user is Kereskedo kereskedo)
+            {
+                model.Cegnev = kereskedo.Cegnev;
+            }
+
+            return View(model);
+        }
+
+        // POST: /Account/Settings
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settings(SettingsViewModel model)
+        {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdString, out int userId)) return RedirectToAction("Login");
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                // Adatok mentése szerepkör alapján
+                if (user is Vasarlo vasarlo)
+                {
+                    vasarlo.SzallitasiCim = model.SzallitasiCim;
+                    vasarlo.Telefonszam = model.Telefonszam;
+                }
+                else if (user is Kereskedo kereskedo)
+                {
+                    kereskedo.Cegnev = model.Cegnev;
+                }
+
+                await _context.SaveChangesAsync();
+
+                // Sikerüzenet beállítása
+                TempData["SuccessMessage"] = "A beállítások sikeresen mentve!";
+                return RedirectToAction("Settings");
+            }
+
+            model.Role = user.Role; // Ha hiba volt, visszaadjuk a formot
+            return View(model);
         }
     }
 }
