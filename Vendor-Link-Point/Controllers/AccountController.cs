@@ -66,7 +66,7 @@ namespace Vendor_Link_Point.Controllers
                         Email = model.Email,
                         Jelszo = hashedPassword,
                         Role = "Vasarlo",
-                        SzallitasiCim = model.SzallitasiCim,
+                        SzallitasiCim = model.SzallitasiCim!,
                         Telefonszam = model.Telefonszam
                     };
                     _context.Users.Add(vasarlo);
