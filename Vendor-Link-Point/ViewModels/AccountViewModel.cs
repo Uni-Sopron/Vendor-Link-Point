@@ -19,24 +19,24 @@ namespace Vendor_Link_Point.ViewModels
     {
         [Required(ErrorMessage = "A név megadása kötelező!")]
         [Display(Name = "Teljes név")]
-        public required string Nev { get; set; }
+        public string Nev { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Az e-mail cím megadása kötelező!")]
         [EmailAddress(ErrorMessage = "Érvénytelen e-mail formátum!")]
         [Display(Name = "E-mail cím")]
-        public required string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "A jelszó megadása kötelező!")]
         [DataType(DataType.Password)]
         [MinLength(6, ErrorMessage = "A jelszónak legalább 6 karakternek kell lennie!")]
         [Display(Name = "Jelszó")]
-        public required string Jelszo { get; set; }
+        public string Jelszo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "A jelszó megerősítése kötelező!")]
         [DataType(DataType.Password)]
         [Compare("Jelszo", ErrorMessage = "A két jelszó nem egyezik!")]
         [Display(Name = "Jelszó megerősítése")]
-        public required string JelszoUjra { get; set; }
+        public string JelszoUjra { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Válassz fióktípust!")]
         [Display(Name = "Fiók típusa")]
@@ -44,10 +44,10 @@ namespace Vendor_Link_Point.ViewModels
 
         // --- Vásárló specifikus mezők (nullable, mert kereskedőnél üres lesz) ---
         [Display(Name = "Szállítási cím")]
-        public required string SzallitasiCim { get; set; }
+        public  string SzallitasiCim { get; set; } = string.Empty;
 
         [Display(Name = "Telefonszám")]
-        public required string Telefonszam { get; set; }
+        public string? Telefonszam { get; set; }
 
         // --- Kereskedő specifikus mezők (nullable) ---
         [Display(Name = "Kereskedő Azonosító")]
