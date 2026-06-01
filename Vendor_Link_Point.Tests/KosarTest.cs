@@ -12,8 +12,33 @@ namespace Vendor_Link_Point.Tests
             // Arrange (Előkészítés)
             var kosar = new Kosar();
 
-            var tv = new TV { Id = 1, Nev = "Teszt TV", Ar = 100000 };
-            var konyv = new Konyv { Id = 2, Nev = "Teszt Könyv", Ar = 5000 };
+            // TV létrehozása minden kötelező mezővel
+            var tv = new TV
+            {
+                Id = 1,
+                Nev = "Teszt TV",
+                Ar = 100000,
+                Gyarto = "Teszt Gyártó",
+                KereskedoId = "VLP-TESZT",
+                Kategoria = "Elektronika",
+                Raktarkeszlet = 10,
+                Kepatlo = 55,
+                Felbontas = "4K"
+            };
+
+            // Könyv létrehozása minden kötelező mezővel
+            var konyv = new Konyv
+            {
+                Id = 2,
+                Nev = "Teszt Könyv",
+                Ar = 5000,
+                Gyarto = "Teszt Kiadó",
+                KereskedoId = "VLP-TESZT",
+                Kategoria = "Könyv",
+                Raktarkeszlet = 10,
+                Szerzo = "Teszt Szerző",
+                Isbn = "123-456-789"
+            };
 
             // Beleteszünk 1 db TV-t (100.000) és 2 db Könyvet (2 * 5.000)
             kosar.Hozzaad(tv, 1);
