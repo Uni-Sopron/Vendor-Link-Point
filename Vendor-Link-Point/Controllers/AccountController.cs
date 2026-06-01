@@ -177,7 +177,7 @@ namespace Vendor_Link_Point.Controllers
             // Adatok betöltése szerepkör alapján
             if (user is Vasarlo vasarlo)
             {
-                model.SzallitasiCim = vasarlo.SzallitasiCim;
+                model.SzallitasiCim = vasarlo.SzallitasiCim!;
                 model.Telefonszam = vasarlo.Telefonszam;
             }
             else if (user is Kereskedo kereskedo)
