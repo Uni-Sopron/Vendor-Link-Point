@@ -108,7 +108,7 @@
                 {
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0 transition-hover">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none position-relative d-block">
                                 @if (string.IsNullOrEmpty(item.KepUrl))
                                 {
                                     <div class="bg-light text-secondary d-flex align-items-center justify-content-center rounded-top" style="height: 160px;">
@@ -122,6 +122,21 @@
                                          class="card-img-top p-3 transition-hover"
                                          alt="@item.Nev"
                                          style="height: 160px; object-fit: contain; background: #fff;">
+                                }
+                                @* --- SZÍV IKON --- *@
+                                @{
+                                    var kedvencIdk = ViewBag.KedvencIdk as List<int> ?? new List<int>();
+                                    bool isKedvenc = kedvencIdk.Contains(item.Id);
+                                }
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <form asp-controller="Kedvencek" asp-action="Toggle" method="post" class="position-absolute top-0 end-0 p-2" style="z-index: 10;">
+                                        <input type="hidden" name="productId" value="@item.Id" />
+                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                        <button type="submit" class="btn btn-light btn-sm rounded-circle shadow-sm" title="Kedvencekhez">
+                                            <i class="bi @(isKedvenc ? "bi-heart-fill text-danger" : "bi-heart text-muted")"></i>
+                                        </button>
+                                    </form>
                                 }
                             </a>
                             <div class="card-body d-flex flex-column p-3 bg-white">

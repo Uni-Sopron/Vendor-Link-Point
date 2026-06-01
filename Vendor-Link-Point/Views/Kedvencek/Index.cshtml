@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Vendor_Link_Point.Models.Kedvenc>
+@{
+    ViewData["Title"] = "Kedvenceim";
+}
+
+<div class="container mt-4 mb-5">
+    <h3 class="fw-bold mb-4"><i class="bi bi-heart-fill text-danger me-2"></i>Kedvenc Termékeim</h3>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info border-0 shadow-sm">
+            Még nem adtál egyetlen terméket sem a kedvenceidhez. <a asp-controller="Products" asp-action="Index" class="fw-bold text-decoration-none">Irány a Webshop!</a>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 transition-hover">
+                        <img src="@item.Termek.KepUrl" class="card-img-top p-3" alt="@item.Termek.Nev" style="height: 180px; object-fit: contain;">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold text-truncate" title="@item.Termek.Nev">@item.Termek.Nev</h6>
+                            <h5 class="text-danger fw-bold">@item.Termek.Ar.ToString("C0", new System.Globalization.CultureInfo("hu-HU"))</h5>
+                        </div>
+                        <div class="card-footer bg-white border-top-0 d-flex gap-2 p-3 pt-0">
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Termek.Id" class="btn btn-primary flex-grow-1 fw-bold">Megnézem</a>
+
+                            <form asp-controller="Kedvencek" asp-action="Toggle" method="post">
+                                <input type="hidden" name="productId" value="@item.Termek.Id" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <button type="submit" class="btn btn-outline-danger" title="Eltávolítás"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

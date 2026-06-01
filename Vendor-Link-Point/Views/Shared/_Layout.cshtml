@@ -37,6 +37,15 @@
                                 <span class="small fw-bold mt-1">Kosár</span>
                             </a>
                         </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item me-4">
+                                <a class="nav-link text-white d-flex flex-column align-items-center" asp-controller="Kedvencek" asp-action="Index">
+                                    <i class="bi bi-heart fs-5"></i>
+                                    <span class="small fw-bold mt-1">Kedvencek</span>
+                                </a>
+                            </li>
+                        }
 
                         @if (User.Identity?.IsAuthenticated == true)
                         {
