@@ -9,10 +9,10 @@ namespace Vendor_Link_Point.Models
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual User Vasarlo { get; set; } // Navigációs tulajdonság
+        public required virtual User Vasarlo { get; set; } // Navigációs tulajdonság
 
         [Required]
         [Display(Name = "Rendelés időpontja")]
@@ -26,20 +26,20 @@ namespace Vendor_Link_Point.Models
         [Required]
         [StringLength(50)]
         [Display(Name = "Rendelés állapota")]
-        public string Allapot { get; set; } // Pl.: "Feldolgozás alatt", "Kiszállítva"
+        public required string Allapot { get; set; } // Pl.: "Feldolgozás alatt", "Kiszállítva"
 
         [Required]
         [StringLength(50)]
         [Display(Name = "Fizetési mód")]
-        public string FizetesiMod { get; set; }
+        public required string FizetesiMod { get; set; }
 
         [Required(ErrorMessage = "A szállítási cím megadása kötelező!")]
         [StringLength(200)]
         [Display(Name = "Szállítási Cím")]
-        public string SzallitasiCim { get; set; }
+        public required string SzallitasiCim { get; set; }
 
         // Egy rendeléshez több tétel tartozik
-        public virtual ICollection<RendelesTetel> RendelesTetelek { get; set; }
+        public virtual ICollection<RendelesTetel> RendelesTetelek { get; set; } = new List<RendelesTetel>();
     }
 
     public class RendelesTetel
@@ -51,21 +51,21 @@ namespace Vendor_Link_Point.Models
         [Required]
         public int OrderId { get; set; }
         [ForeignKey("OrderId")]
-        public virtual Rendeles Rendeles { get; set; }
+        public required virtual Rendeles Rendeles { get; set; }
 
         [Required]
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public virtual Product Termek { get; set; }
+        public required virtual Product Termek { get; set; }
 
         [Required]
         [Range(1, 100, ErrorMessage = "A mennyiség 1 és 100 között kell legyen.")]
         [Display(Name = "Mennyiség (db)")]
-        public int Mennyiseg { get; set; }
+        public required int Mennyiseg { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         [Display(Name = "Egységár (Ft)")]
-        public decimal Egysegar { get; set; }
+        public required decimal Egysegar { get; set; }
     }
 }
