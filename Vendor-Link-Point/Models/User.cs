@@ -33,7 +33,7 @@ namespace Vendor_Link_Point.Models
         [Required(ErrorMessage = "A szállítási cím megadása kötelező!")]
         [StringLength(200)]
         [Display(Name = "Szállítási cím")]
-        public required string SzallitasiCim { get; set; }
+        public string? SzallitasiCim { get; set; }
 
         [Phone(ErrorMessage = "Érvénytelen telefonszám formátum!")]
         [Display(Name = "Telefonszám")]
