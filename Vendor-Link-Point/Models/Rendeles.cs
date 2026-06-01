@@ -12,7 +12,7 @@ namespace Vendor_Link_Point.Models
         public required int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public required virtual User Vasarlo { get; set; } // Navigációs tulajdonság
+        public virtual User Vasarlo { get; set; } = null!; // Navigációs tulajdonság
 
         [Required]
         [Display(Name = "Rendelés időpontja")]
@@ -51,12 +51,12 @@ namespace Vendor_Link_Point.Models
         [Required]
         public int OrderId { get; set; }
         [ForeignKey("OrderId")]
-        public required virtual Rendeles Rendeles { get; set; }
+        public virtual Rendeles Rendeles { get; set; } = null!;
 
         [Required]
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public required virtual Product Termek { get; set; }
+        public virtual Product Termek { get; set; } = null!;
 
         [Required]
         [Range(1, 100, ErrorMessage = "A mennyiség 1 és 100 között kell legyen.")]
