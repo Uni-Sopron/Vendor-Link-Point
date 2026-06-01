@@ -38,12 +38,12 @@
                             </a>
                         </li>
 
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white d-flex flex-column align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle fs-5"></i>
-                                    <span class="small fw-bold mt-1">Szia, @User.Identity.Name!</span>
+                                    <span class="small fw-bold mt-1">Szia, @(User.Identity?.Name ?? "Felhasználó")!</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown">
 
@@ -58,6 +58,8 @@
                                         <!-- Ezt CSAK a Kereskedő látja -->
                                         <li><a class="dropdown-item fw-bold text-success py-2" asp-area="" asp-controller="VendorOrders" asp-action="Index"><i class="bi bi-shop me-2"></i>Beérkezett Rendelések</a></li>
                                     }
+
+                                    <li><a class="dropdown-item fw-bold text-secondary py-2" asp-area="" asp-controller="Account" asp-action="Settings"><i class="bi bi-gear-fill me-2"></i>Beállítások</a></li>
 
                                     <li><hr class="dropdown-divider"></li>
                                     <li><h6 class="dropdown-header">Szerepkör: @User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value</h6></li>
@@ -88,7 +90,7 @@
                         </a>
                     </li>
 
-                    @if (User.Identity.IsAuthenticated && User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value == "Kereskedo")
+                    @if (User.Identity?.IsAuthenticated == true && User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value == "Kereskedo")
                     {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-danger fw-bold" href="#" id="kereskedoAdminDropdown" role="button" data-bs-toggle="dropdown">
@@ -114,7 +116,9 @@
 
     <footer class="border-top footer text-muted bg-white mt-5 py-4">
         <div class="container text-center">
-            &copy; 2026 - Vendor-Link-Point - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Adatvédelem (Privacy)</a>
+            &copy; 2026 - Vendor-Link-Point -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted fw-bold">Adatvédelem (Privacy)</a> |
+            <a asp-area="" asp-controller="Home" asp-action="Elerhetoseg" class="text-decoration-none text-muted fw-bold">Elérhetőség</a>
         </div>
     </footer>
 

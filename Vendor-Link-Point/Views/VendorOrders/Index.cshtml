@@ -48,7 +48,7 @@
                                             @foreach (var tetel in rendeles.RendelesTetelek)
                                             {
                                                 <!-- Csak akkor mutatjuk vastagon, ha az a mi (kereskedő) termékünk -->
-                                                <li class="@(tetel.Termek.KereskedoId == User.FindFirst("KereskedoId")?.Value ? "fw-bold text-dark" : "text-muted")">
+                                                <li class="@(tetel.Termek?.KereskedoId == User.FindFirst("KereskedoId")?.Value ? "fw-bold text-dark" : "text-muted")">
                                                     @tetel.Mennyiseg x @(tetel.Termek?.Nev ?? "Törölt")
                                                 </li>
                                             }

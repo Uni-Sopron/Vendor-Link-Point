@@ -2,7 +2,7 @@
 {
     public class KosarTetel
     {
-        public Product Termek { get; set; }
-        public int Mennyiseg { get; set; }
+        public required Product Termek { get; set; }
+        public required int Mennyiseg { get; set; }
     }
 }

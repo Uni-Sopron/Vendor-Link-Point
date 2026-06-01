@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vendor_Link_Point.Data;
 
@@ -11,9 +12,11 @@ using Vendor_Link_Point.Data;
 namespace Vendor_Link_Point.Migrations
 {
     [DbContext(typeof(VendorLinkPointContext))]
-    partial class VendorLinkPointContextModelSnapshot : ModelSnapshot
+    [Migration("20260601091428_SeedData")]
+    partial class SeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,7 +232,7 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "CD Projekt Red",
                             Kategoria = "Játékok",
-                            KepUrl = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+                            KepUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmGIEPRaJ3z7E8MIG.png",
                             KereskedoId = "VLP-KOCKA",
                             Leiras = "Bújj Ríviai Geralt bőrébe ebben a hatalmas, nyílt világú kalandban.",
                             Nev = "The Witcher 3: Wild Hunt",
@@ -244,43 +247,13 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "Warner Bros",
                             Kategoria = "Játékok",
-                            KepUrl = "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+                            KepUrl = "https://image.api.playstation.com/vulcan/ap/rnd/202011/0919/cDKjqQc1QvM89tU33T94k8O6.png",
                             KereskedoId = "VLP-KOCKA",
                             Leiras = "Fedezd fel a varázslóvilágot a 19. században ebben a lenyűgöző játékban!",
                             Nev = "Hogwarts Legacy",
                             Raktarkeszlet = 15,
                             Korhatar = 16,
                             Tipus = "Akció-RPG"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Ar = 12500m,
-                            Elerheto = true,
-                            Gyarto = "CD Projekt Red",
-                            Kategoria = "Játékok",
-                            KepUrl = "https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-KOCKA",
-                            Leiras = "Éld át a jövő sötét és neonfényes városának izgalmait.",
-                            Nev = "Cyberpunk 2077",
-                            Raktarkeszlet = 40,
-                            Korhatar = 18,
-                            Tipus = "Akció-RPG"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Ar = 19990m,
-                            Elerheto = true,
-                            Gyarto = "Electronic Arts",
-                            Kategoria = "Játékok",
-                            KepUrl = "https://images.unsplash.com/photo-1611158742626-663f73319be1?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-KOCKA",
-                            Leiras = "A világ legnépszerűbb futballszimulátora új néven, de a régi minőséggel.",
-                            Nev = "EA Sports FC 24",
-                            Raktarkeszlet = 50,
-                            Korhatar = 3,
-                            Tipus = "Sport"
                         });
                 });
 
@@ -308,58 +281,13 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "Európa Könyvkiadó",
                             Kategoria = "Könyvek",
-                            KepUrl = "https://images.unsplash.com/photo-1629196914594-5b481977e68e?auto=format&fit=crop&w=800&q=80",
+                            KepUrl = "https://bookline.hu/zoom/bookline/092/10/92/27/0921092270.jpg",
                             KereskedoId = "VLP-KOCKA",
                             Leiras = "Minden idők leghíresebb fantasy regényének első része.",
                             Nev = "A Gyűrűk Ura - A Gyűrű Szövetsége",
                             Raktarkeszlet = 20,
                             Isbn = "9789630798150",
                             Szerzo = "J.R.R. Tolkien"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Ar = 4800m,
-                            Elerheto = true,
-                            Gyarto = "Animus Kiadó",
-                            Kategoria = "Könyvek",
-                            KepUrl = "https://images.unsplash.com/photo-1618666012174-83b441c0bc76?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-KIRALY",
-                            Leiras = "A történet, amellyel egy egész generáció szeretett bele az olvasásba.",
-                            Nev = "Harry Potter és a bölcsek köve",
-                            Raktarkeszlet = 45,
-                            Isbn = "9789633245453",
-                            Szerzo = "J.K. Rowling"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Ar = 8900m,
-                            Elerheto = true,
-                            Gyarto = "Kiskapu",
-                            Kategoria = "Könyvek",
-                            KepUrl = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-KIRALY",
-                            Leiras = "Kötelező olvasmány minden szoftverfejlesztő számára.",
-                            Nev = "Tiszta kód (Clean Code)",
-                            Raktarkeszlet = 15,
-                            Isbn = "9789639301980",
-                            Szerzo = "Robert C. Martin"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Ar = 5200m,
-                            Elerheto = true,
-                            Gyarto = "Gabo Kiadó",
-                            Kategoria = "Könyvek",
-                            KepUrl = "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-KIRALY",
-                            Leiras = "Sci-fi klasszikus, amely alapjaiban határozta meg a műfajt.",
-                            Nev = "Dűne",
-                            Raktarkeszlet = 30,
-                            Isbn = "9789634063216",
-                            Szerzo = "Frank Herbert"
                         });
                 });
 
@@ -385,7 +313,7 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "Samsung",
                             Kategoria = "TV-k",
-                            KepUrl = "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80",
+                            KepUrl = "https://images.samsung.com/is/image/samsung/p6pim/hu/ue55cu7172uxxh/gallery/hu-crystal-uhd-cu7000-ue55cu7172uxxh-536306536?$650_519_PNG$",
                             KereskedoId = "VLP-ELEKTRO",
                             Leiras = "Lélegzetelállító 4K felbontás és kristálytiszta színek okos funkciókkal.",
                             Nev = "Samsung 55\" 4K Smart UHD TV",
@@ -400,43 +328,13 @@ namespace Vendor_Link_Point.Migrations
                             Elerheto = true,
                             Gyarto = "LG",
                             Kategoria = "TV-k",
-                            KepUrl = "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=800&q=80",
+                            KepUrl = "https://www.lg.com/hu/images/televiziok/md07593256/gallery/D-01.jpg",
                             KereskedoId = "VLP-ELEKTRO",
                             Leiras = "Tökéletes fekete és végtelen kontraszt az LG OLED technológiájával.",
                             Nev = "LG OLED 65\" C3",
                             Raktarkeszlet = 5,
                             Felbontas = "4K OLED",
                             Kepatlo = 65
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Ar = 820000m,
-                            Elerheto = true,
-                            Gyarto = "Sony",
-                            Kategoria = "TV-k",
-                            KepUrl = "https://images.unsplash.com/photo-1552831388-6a0b35077328?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-ELEKTRO",
-                            Leiras = "Hatalmas méret és prémium képminőség házimozihoz.",
-                            Nev = "Sony Bravia 75\" XR",
-                            Raktarkeszlet = 3,
-                            Felbontas = "8K UHD",
-                            Kepatlo = 75
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Ar = 185000m,
-                            Elerheto = true,
-                            Gyarto = "Philips",
-                            Kategoria = "TV-k",
-                            KepUrl = "https://images.unsplash.com/photo-1601944177325-f8867652837f?auto=format&fit=crop&w=800&q=80",
-                            KereskedoId = "VLP-ELEKTRO",
-                            Leiras = "Különleges háttérvilágítással, amely követi a képernyő eseményeit.",
-                            Nev = "Philips 50\" Ambilight",
-                            Raktarkeszlet = 8,
-                            Felbontas = "4K UHD",
-                            Kepatlo = 50
                         });
                 });
 
@@ -475,16 +373,6 @@ namespace Vendor_Link_Point.Migrations
                             Role = "Kereskedo",
                             Cegnev = "Kocka Barlang",
                             KereskedoId = "VLP-KOCKA"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "konyv@vendor.hu",
-                            Jelszo = "7jqVtG5ypHGQXHK6YYkJWA==:Juoi47jOMwjH7dtqmA2zN6rRQXGZuoSJkewbDQoCcP8=",
-                            Nev = "Király Dávid",
-                            Role = "Kereskedo",
-                            Cegnev = "Király Könyvesbolt",
-                            KereskedoId = "VLP-KIRALY"
                         });
                 });
 
@@ -512,16 +400,6 @@ namespace Vendor_Link_Point.Migrations
                             Role = "Vasarlo",
                             SzallitasiCim = "1055 Budapest, Kossuth Lajos tér 1-3.",
                             Telefonszam = "+36301234567"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Email = "anna@vendor.hu",
-                            Jelszo = "7jqVtG5ypHGQXHK6YYkJWA==:Juoi47jOMwjH7dtqmA2zN6rRQXGZuoSJkewbDQoCcP8=",
-                            Nev = "Nagy Anna",
-                            Role = "Vasarlo",
-                            SzallitasiCim = "9022 Győr, Kiss János utca 5.",
-                            Telefonszam = "+36209876543"
                         });
                 });
 

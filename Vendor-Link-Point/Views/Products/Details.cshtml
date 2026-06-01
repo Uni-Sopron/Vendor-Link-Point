@@ -22,7 +22,11 @@
             }
             else
             {
-                <img src="@Model.KepUrl" alt="@Model.Nev" class="img-fluid" style="max-height: 350px; object-fit: contain;">
+                <img src="@Model.KepUrl"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/f8f9fa/6c757d?text=Nincs+k%C3%A9p';"
+                     alt="@Model.Nev"
+                     class="img-fluid"
+                     style="max-height: 400px; object-fit: contain;">
             }
         </div>
 

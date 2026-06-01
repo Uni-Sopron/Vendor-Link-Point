@@ -21,6 +21,8 @@ namespace Vendor_Link_Point.Models
             Tetelek.RemoveAll(t => t.Termek.Id == termekId);
         }
 
+        public void Urit() => Tetelek.Clear();
+
         public void FrissitMennyiseg(int termekId, int valtozas)
         {
             var tetel = Tetelek.FirstOrDefault(t => t.Termek.Id == termekId);

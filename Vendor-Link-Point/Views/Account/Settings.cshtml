@@ -1,0 +1,64 @@
+﻿@model Vendor_Link_Point.ViewModels.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Beállítások";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom fw-bold py-3">
+                    <i class="bi bi-gear-fill text-primary me-2"></i> Profil Beállítások
+                </div>
+                <div class="card-body p-4">
+
+                    @* Sikerüzenet megjelenítése *@
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Settings" method="post">
+                        <input type="hidden" asp-for="Role" />
+
+                        @if (Model.Role == "Vasarlo")
+                        {
+                            <div class="mb-3">
+                                <label asp-for="SzallitasiCim" class="form-label fw-bold"></label>
+                                <input asp-for="SzallitasiCim" class="form-control" placeholder="Utca, házszám, város..." />
+                                <span asp-validation-for="SzallitasiCim" class="text-danger small"></span>
+                            </div>
+                            <div class="mb-4">
+                                <label asp-for="Telefonszam" class="form-label fw-bold"></label>
+                                <input asp-for="Telefonszam" class="form-control" placeholder="+36..." />
+                                <span asp-validation-for="Telefonszam" class="text-danger small"></span>
+                            </div>
+                        }
+                        else if (Model.Role == "Kereskedo")
+                        {
+                            <div class="mb-4">
+                                <label asp-for="Cegnev" class="form-label fw-bold"></label>
+                                <input asp-for="Cegnev" class="form-control" placeholder="Pl.: Kovács Kft." />
+                                <span asp-validation-for="Cegnev" class="text-danger small"></span>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-primary w-100 fw-bold mt-2">
+                            <i class="bi bi-save me-2"></i>Mentés
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

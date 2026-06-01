@@ -97,7 +97,7 @@ namespace Vendor_Link_Point.Controllers
             bool canReview = false;
             bool hasReviewed = false;
 
-            if (User.Identity.IsAuthenticated && User.IsInRole("Vasarlo"))
+            if (User.Identity?.IsAuthenticated == true && User.IsInRole("Vasarlo"))
             {
                 var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 if (int.TryParse(userIdString, out int userId))

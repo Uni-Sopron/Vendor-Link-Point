@@ -68,7 +68,7 @@ namespace Vendor_Link_Point.Controllers
             if (ModelState.IsValid)
             {
                 // 3. HOZZÁRENDELÉS: Mentés előtt rögzítjük, hogy ki a tulajdonos
-                tV.KereskedoId = User.FindFirst("KereskedoId")?.Value;
+                tV.KereskedoId = User.FindFirst("KereskedoId")?.Value ?? "";
                 tV.Kategoria = "TV-k"; // Biztosíték
                 tV.Elerheto = tV.Raktarkeszlet > 0;
 
@@ -116,7 +116,7 @@ namespace Vendor_Link_Point.Controllers
                 try
                 {
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
-                    tV.KereskedoId = myKereskedoId;
+                    tV.KereskedoId = myKereskedoId ?? "";
                     tV.Kategoria = "Tv-k";
 
                     _context.Update(tV);
