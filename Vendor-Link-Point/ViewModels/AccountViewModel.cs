@@ -44,7 +44,7 @@ namespace Vendor_Link_Point.ViewModels
 
         // --- Vásárló specifikus mezők (nullable, mert kereskedőnél üres lesz) ---
         [Display(Name = "Szállítási cím")]
-        public  string SzallitasiCim { get; set; } = string.Empty;
+        public  string? SzallitasiCim { get; set; }
 
         [Display(Name = "Telefonszám")]
         public string? Telefonszam { get; set; }
