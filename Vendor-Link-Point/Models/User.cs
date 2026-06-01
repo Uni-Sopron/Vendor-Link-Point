@@ -35,10 +35,9 @@ namespace Vendor_Link_Point.Models
         [Display(Name = "Szállítási cím")]
         public required string SzallitasiCim { get; set; }
 
-        [Required(ErrorMessage = "A telefonszám megadása kötelező!")]
         [Phone(ErrorMessage = "Érvénytelen telefonszám formátum!")]
         [Display(Name = "Telefonszám")]
-        public required string Telefonszam { get; set; }
+        public string? Telefonszam { get; set; }
     }
 
     public class Kereskedo : User
