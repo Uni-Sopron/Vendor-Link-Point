@@ -11,12 +11,12 @@ namespace Vendor_Link_Point.Models
         [Required]
         public required int ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public required virtual Product Termek { get; set; }
+        public virtual Product Termek { get; set; } = null!;
 
         [Required]
         public required int UserId { get; set; }
         [ForeignKey("UserId")]
-        public required virtual User Vasarlo { get; set; }
+        public virtual User Vasarlo { get; set; } = null!;
 
         [Required]
         [Range(1, 5)]
