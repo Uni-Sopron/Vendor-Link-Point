@@ -16,6 +16,12 @@
         <form method="get" asp-action="Index" id="filterForm">
             <input type="hidden" name="kategoria" value="@Model.CurrentCategory" />
 
+            @* Ezt a sort adjuk hozzá, hogy a keresés megmaradjon a szűréseknél is! *@
+            @if (!string.IsNullOrEmpty(Context.Request.Query["kereses"]))
+            {
+                <input type="hidden" name="kereses" value="@Context.Request.Query["kereses"]" />
+            }
+
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-white border-bottom fw-bold">
                     <i class="bi bi-funnel text-primary me-2"></i>Kategóriák

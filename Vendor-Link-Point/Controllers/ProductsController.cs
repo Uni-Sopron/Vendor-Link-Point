@@ -16,7 +16,7 @@ namespace Vendor_Link_Point.Controllers
         }
 
         // GET: /Products
-        public async Task<IActionResult> Index(string? kategoria, int? minAr, int? maxAr, List<string> meretek)
+        public async Task<IActionResult> Index(string? kategoria, int? minAr, int? maxAr, List<string> meretek, string? kereses)
         {
             // 1. Alap lekérdezés: csak az elérhető termékek
             var baseQuery = _context.Products.Where(p => p.Elerheto);
@@ -44,6 +44,12 @@ namespace Vendor_Link_Point.Controllers
             // 4. Ár szűrés alkalmazása
             if (minAr.HasValue) filteredQuery = filteredQuery.Where(p => p.Ar >= minAr.Value);
             if (maxAr.HasValue) filteredQuery = filteredQuery.Where(p => p.Ar <= maxAr.Value);
+
+            if (!string.IsNullOrEmpty(kereses))
+            {
+                // Keresünk a termék nevében VAGY a gyártó nevében
+                filteredQuery = filteredQuery.Where(p => p.Nev.Contains(kereses) || p.Gyarto.Contains(kereses));
+            }
 
             // 5. Specifikus (TV) szűrések és darabszámok
             if (kategoria == "TV-k")

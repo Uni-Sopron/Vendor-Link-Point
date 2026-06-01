@@ -23,8 +23,8 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
-                    <form class="d-flex mx-auto w-50 my-3 my-lg-0">
-                        <input class="form-control rounded-start-pill border-0 px-4" type="search" placeholder="Mit keresel? (pl. Samsung TV, Witcher 3...)" aria-label="Keresés">
+                    <form asp-controller="Products" asp-action="Index" method="get" class="d-flex mx-auto w-50 my-3 my-lg-0">
+                        <input name="kereses" value="@Context.Request.Query["kereses"]" class="form-control rounded-start-pill border-0 px-4" type="search" placeholder="Mit keresel? (pl. Samsung TV, Witcher 3...)" aria-label="Keresés">
                         <button class="btn btn-warning rounded-end-pill px-4 fw-bold text-dark" type="submit">
                             <i class="bi bi-search"></i> Keresés
                         </button>
