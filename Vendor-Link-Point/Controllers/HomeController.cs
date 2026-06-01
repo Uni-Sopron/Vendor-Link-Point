@@ -36,6 +36,11 @@ namespace Vendor_Link_Point.Controllers
             return View();
         }
 
+        public IActionResult Elerhetoseg()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
