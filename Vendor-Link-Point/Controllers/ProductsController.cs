@@ -78,6 +78,21 @@ namespace Vendor_Link_Point.Controllers
 
             // 6. Végleges lista átadása
             vm.Termekek = await filteredQuery.ToListAsync();
+
+            List<int> kedvencIdk = new List<int>();
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdStr, out int uId))
+                {
+                    kedvencIdk = await _context.Kedvencek
+                                               .Where(k => k.UserId == uId)
+                                               .Select(k => k.ProductId)
+                                               .ToListAsync();
+                }
+            }
+            ViewBag.KedvencIdk = kedvencIdk;
+
             return View(vm);
         }
 
