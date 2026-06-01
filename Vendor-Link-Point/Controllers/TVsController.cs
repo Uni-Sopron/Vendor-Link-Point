@@ -115,6 +115,7 @@ namespace Vendor_Link_Point.Controllers
             {
                 try
                 {
+                    tV.Elerheto = tV.Raktarkeszlet > 0;
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
                     tV.KereskedoId = myKereskedoId ?? "";
                     tV.Kategoria = "Tv-k";

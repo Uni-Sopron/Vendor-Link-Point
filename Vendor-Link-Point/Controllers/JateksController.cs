@@ -117,6 +117,7 @@ namespace Vendor_Link_Point.Controllers
             {
                 try
                 {
+                    jatek.Elerheto = jatek.Raktarkeszlet > 0;
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
                     jatek.KereskedoId = myKereskedoId ?? "";
                     jatek.Kategoria = "Játékok";

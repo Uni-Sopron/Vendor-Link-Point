@@ -117,6 +117,7 @@ namespace Vendor_Link_Point.Controllers
             {
                 try
                 {
+                    konyv.Elerheto = konyv.Raktarkeszlet > 0;
                     // Visszapótoljuk a rejtett azonosítót, nehogy elvesszen a frissítéskor
                     konyv.KereskedoId = myKereskedoId ?? "";
                     konyv.Kategoria = "Könyvek";
